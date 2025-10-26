@@ -1,0 +1,156 @@
+@use "../../styles/abstracts/variables" as *;
+@use "../../styles/index.scss" as *;
+
+.componentContainer {
+  width: 100%;
+  min-height: 100vh;
+  padding: 28px;
+  box-sizing: border-box;
+  position: relative;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(0, 0, 0, 0.02)
+  );
+}
+
+.backBtn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: inherit;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 18px;
+  transition: transform 0.12s ease, background 0.12s ease;
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.component {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 20px;
+  align-items: start;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.left {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: stretch;
+}
+
+.imageWrap {
+  position: relative;
+  width: 100%;
+  height: 360px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.02);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.noImage {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 18px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.badges {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.model {
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.price {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.right {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.card {
+  @extend .card;
+  padding: 14px;
+  border-radius: 10px;
+}
+
+.sectionTitle {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.specsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 12px;
+}
+
+.specRow {
+  display: contents;
+}
+
+.label {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.55);
+  padding: 6px 0;
+  align-self: center;
+}
+
+.value {
+  font-size: 14px;
+  font-weight: 600;
+  padding: 6px 0;
+  align-self: center;
+}
+
+.notFound {
+  font-size: 28px;
+  color: #ff6b6b;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 120px;
+  font-weight: 700;
+}
+
+@media (max-width: 880px) {
+  .component {
+    grid-template-columns: 1fr;
+  }
+  .imageWrap {
+    height: 260px;
+  }
+  .specsGrid {
+    grid-template-columns: 1fr;
+  }
+}

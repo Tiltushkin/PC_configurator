@@ -1,0 +1,56 @@
+
+.wrapper {
+  min-height: calc(100dvh - 120px);
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+.card {
+  width: min(920px, 100%);
+  border: 1px solid var(--stroke);
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.00));
+  box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.left {
+  padding: 28px;
+  display: grid;
+  align-content: start;
+  gap: 18px;
+}
+.right {
+  position: relative;
+  background:
+    radial-gradient(600px 240px at 60% 20%, rgba(255,0,51,0.18), transparent 60%),
+    linear-gradient(180deg, rgba(255,0,51,0.12), rgba(255,0,51,0.05));
+  border-left: 1px solid var(--stroke);
+}
+.rightOverlay {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(0deg, rgba(0,0,0,0.5), rgba(0,0,0,0.3));
+ padding: 24px 20px; box-sizing: border-box; gap: 18px; }
+.field { display: grid; gap: 8px; }
+.row { display: grid; gap: 12px; }
+.tabs {
+  display: inline-grid;
+  grid-auto-flow: column;
+  gap: 8px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--stroke);
+  padding: 6px;
+  border-radius: 12px;
+}
+.tab {
+  padding: 10px 14px; border-radius: 8px; cursor: pointer;
+  transition: .2s ease;
+}
+.tab[data-active="true"] {
+  background: rgba(255,0,51,0.18);
+  border: 1px solid rgba(255,0,51,0.5);
+  box-shadow: var(--glow);
+}
+.hint { font-size: 12px; opacity: .7; }

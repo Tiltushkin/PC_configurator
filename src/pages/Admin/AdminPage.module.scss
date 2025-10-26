@@ -1,0 +1,217 @@
+@use "../../styles/index" as *;
+
+.wrap {
+  position: relative;
+  padding: 24px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px; margin-bottom: 16px;
+
+  h1 {
+    margin: 0;
+  }
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+}
+
+.tabs > button {
+  @extend .card;
+  padding: 8px 14px;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: #ffffff;
+  transition: transform .2s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+  }
+}
+
+.tabs > .active {
+  box-shadow: 0 0 0 2px rgba(255,0,51,0.35) inset;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 16px;
+}
+
+.left {
+  display: grid;
+  gap: 16px;
+  align-content: start;
+}
+
+.right {
+  position: sticky;
+  top: 86px;
+  height: fit-content;
+}
+
+.card, .cardSticky {
+  @extend .card;
+  padding: 16px;
+  border-radius: 16px;
+  backdrop-filter: blur(6px);
+}
+
+.cardSticky {
+  position: sticky;
+  top: 16px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+@media (max-width: 1100px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .right {
+    position: static;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.field {
+  display: grid; gap: 6px;
+
+  span {
+    font-size: 12px;
+    color: #bdbdbd;
+  }
+
+  input, textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.18); color: #fff;
+    outline: none;
+  }
+}
+.textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.imgRow {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 10px;
+  align-items: center;
+
+  input[type="text"] {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.18); color: #fff;
+  }
+}
+
+.fileBtn {
+  @extend .card;
+  padding: 10px 12px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+
+  input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+}
+
+.previewGrid {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+}
+
+.thumb {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.18);
+
+  img {
+    width: 100%;
+    max-width: 248px !important;
+    min-height: 100px;
+    max-height: 248px;
+    object-fit: cover;
+    display: block;
+  }
+}
+
+.del {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: rgba(0,0,0,.55);
+  color: #fff;
+  border: 0;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  line-height: 22px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.badge {
+  position: absolute;
+  left: 6px;
+  top: 6px;
+  background: rgba(255,0,51,.8);
+  color: #fff;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 10px;
+}
+
+.actions {
+  display: grid;
+  gap: 10px;
+}
+
+.ok {
+  color: #00d084;
+  font-weight: 700;
+}
+
+.err {
+  color: #ff5555;
+  font-weight: 700;
+}
+
+.adv {
+  margin-top: 8px;
+}
+
+.hint {
+  font-size: 12px;
+  color: #bdbdbd;
+  margin-top: 8px;
+}

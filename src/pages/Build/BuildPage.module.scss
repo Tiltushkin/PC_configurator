@@ -1,0 +1,528 @@
+@use "../../styles/index" as *;
+
+$slot-min: 520px;
+$slot-gap: 20px;
+$slot-media: 48px;
+$pad-card: 12px;
+
+.configContainer {
+  position: relative;
+  width: 100%;
+  min-height: 100%;
+
+  * { box-sizing: border-box; }
+
+  h2 { width: fit-content; }
+
+  div[class="card"]:first-child {
+    position: relative;
+    width: fit-content;
+    padding: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 15px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .buildContainer {
+    @extend .card;
+    position: relative;
+    top: 30px;
+    margin-right: auto;
+    margin-left: 0;
+    padding: 20px;
+
+    width: min(1165px, calc(100% - 420px));
+
+    display: grid;
+    grid-template-columns: repeat(2, minmax($slot-min, 1fr));
+    gap: $slot-gap;
+
+    @media (max-width: 1140px) {
+      grid-template-columns: minmax($slot-min, 1fr);
+      width: 100%;
+    }
+
+    &__item {
+      @extend .card;
+      position: relative;
+      width: 100%;
+      min-height: 96px;
+      padding: $pad-card $pad-card*1.25;
+
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      column-gap: 16px;
+      transition: transform .3s ease, box-shadow .2s ease;
+
+      &:hover {
+        cursor: pointer;
+        transform: scale(1.02);
+        box-shadow: 0 0 15px rgba(255, 0, 51, 0.35);
+      }
+
+      img {
+        width: $slot-media;
+        height: $slot-media;
+        min-width: $slot-media;
+        min-height: $slot-media;
+        object-fit: contain;
+        border-radius: 10px;
+        user-select: none;
+        pointer-events: none;
+      }
+
+      .itemTitle {
+        min-width: 0;
+        font-size: 18px;
+        font-weight: 600;
+        color: #ffffff;
+        line-height: 1.25;
+        overflow-wrap: anywhere;
+
+        span {
+          display: inline-block;
+          font-size: 14px;
+          font-weight: 400;
+          color: #9ca3af;
+          margin-top: 2px;
+        }
+      }
+
+      .subInfoContainer {
+        align-self: stretch;
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+        align-items: start;
+        justify-items: end;
+        gap: 8px;
+      }
+
+      .qtyCtrl {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(255,255,255,.06);
+        border: 1px solid rgba(255,255,255,.18);
+        border-radius: 10px;
+        padding: 4px 6px;
+        margin-right: 80px;
+
+        .qtyBtn {
+          background: transparent;
+          border: none;
+          color: #fff;
+          font-size: 16px;
+          width: 24px;
+          height: 24px;
+          cursor: pointer;
+          border-radius: 8px;
+
+          &:hover { background: rgba(255,255,255,.08); }
+        }
+        .qtyVal {
+          min-width: 20px;
+          text-align: center;
+          font-weight: 700;
+        }
+      }
+
+      .itemPrice {
+        grid-row: 3;
+        font-size: 16px;
+        font-weight: 700;
+        color: #fff;
+        white-space: nowrap;
+        text-align: right;
+      }
+
+      .clearBtn {
+        position: absolute;
+        right: 8px;
+        top: 8px;
+        background: transparent;
+        border: none;
+        color: #bdbdbd;
+        font-size: 18px;
+        padding: 0;
+        line-height: 1;
+        border-radius: 8px;
+        cursor: pointer;
+        width: 24px;
+        height: 24px;
+
+        span {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+        }
+
+        &:hover { color: #fff; background: rgba(255,255,255,.08); }
+      }
+    }
+  }
+
+  .rightOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .25s ease;
+  }
+
+  .rightOverlayBackdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(7,8,10,0.6);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 2450;
+    opacity: 0;
+    transition: opacity .25s ease;
+  }
+
+  .rightOverlayShow {
+    pointer-events: auto;
+    opacity: 1;
+  }
+
+  .rightOverlayShow .rightOverlayBackdrop {
+    opacity: 1;
+  }
+
+  .roPanel {
+    position: relative;
+    z-index: 2501;
+    width: min(1100px, 96vw);
+    height: min(84vh, 920px);
+    background: var(--card-bg, #0b0b0b);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.6), 0 2px 8px rgba(255, 0, 51, 0.06);
+    border: 1px solid rgba(255,255,255,0.04);
+    pointer-events: auto;
+    transform-origin: center;
+    animation: togglePanel .28s cubic-bezier(.2,.9,.3,1);
+    padding: 10px;
+    top: 25px;
+  }
+
+  @keyframes togglePanel {
+    from { transform: translateY(8px) scale(.998); opacity: 0; }
+    to { transform: translateY(0) scale(1); opacity: 1; }
+  }
+
+  .roBody {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 12px;
+    height: 100%;
+    padding: 16px;
+    box-sizing: border-box;
+  }
+
+  .roFilters {
+    width: 320px;
+    padding-right: 8px;
+    overflow: auto;
+    border-right: 1px solid rgba(255,255,255,0.03);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .roFilters h4 {
+    margin: 0;
+    font-size: 14px;
+    color: #fff;
+    font-weight: 700;
+  }
+
+  .filterRow {
+    display: grid;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .filterRow label {
+    font-size: 13px;
+    color: #bdbdbd;
+    font-weight: 600;
+  }
+
+  .roList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 4px;
+    overflow: auto;
+    max-height: calc(84vh - 64px);
+  }
+
+  .roRow {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 16px;
+    align-items: center;
+    background: rgba(255,255,255,.03);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 12px;
+    padding: 10px;
+    cursor: pointer;
+    transition: box-shadow .20s ease, transform .18s ease, background .15s ease;
+    position: relative;
+  }
+
+  .roRow:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 22px rgba(0,0,0,0.5), 0 0 8px rgba(255,0,51,0.12);
+    background: rgba(255,255,255,.04);
+  }
+
+  .roRowMain {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    text-align: left;
+    min-width: 0;
+  }
+
+  .roRowImage {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    border-radius: 8px;
+    background: transparent;
+  }
+
+  .roRowTitle {
+    font-weight: 700;
+    color: #ffffff;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .roRowMeta {
+    font-size: 12px;
+    color: #bdbdbd;
+  }
+
+  .roRowAside {
+    font-weight: 700;
+    color: #fff;
+    white-space: nowrap;
+    font-size: 14px;
+  }
+
+  .empty {
+    color: #bdbdbd;
+    padding: 12px;
+    text-align: center;
+  }
+
+  .roStub {
+    display: grid;
+    gap: 6px;
+    margin-top: 8px;
+    color: #bdbdbd;
+  }
+
+  .stubTitle {
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .stubText {
+    font-size: 14px;
+  }
+
+  .roHead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 8px;
+    padding: 0 16px 8px 16px;
+  }
+
+  .roTitle {
+    font-weight: 700;
+    font-size: 16px;
+    color: #fff;
+  }
+
+  .roClose {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,.16);
+    border-radius: 10px;
+    color: #fff;
+    width: 30px;
+    height: 30px;
+    line-height: 1;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateY(5px);
+  }
+
+  .roClose:hover { background: rgba(255,255,255,.06); }
+
+  .roSearchRow {
+    margin: 0 16px 8px 16px;
+  }
+
+  .input, .textarea {
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 12px;
+    padding: 10px 12px;
+    color: #fff;
+    width: 100%;
+  }
+
+  .input:focus, .textarea:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255,255,255,.06);
+    background: rgb(36, 35, 35);
+  }
+
+  .editWrap { display: grid; gap: 10px; min-width: 560px; }
+  .editRow {
+    display: grid; grid-template-columns: 100px 1fr; gap: 10px; align-items: center;
+    label { color: #bdbdbd; }
+  }
+  .switchRow { display: inline-flex; align-items: center; gap: 8px; user-select: none; }
+  .editActions { display: flex; justify-content: flex-end; }
+
+  .storagePicker {
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    transform: translateY(-8px);
+    display: grid;
+    gap: 6px;
+    background: rgba(10,10,15,.96);
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 12px;
+    padding: 10px;
+    z-index: 2600;
+    box-shadow: 0 10px 30px rgba(0,0,0,.35);
+  }
+
+  .storagePicker button {
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.18);
+    color: #fff;
+    border-radius: 10px;
+    padding: 8px 10px;
+    cursor: pointer;
+    text-align: left;
+    transition: transform .15s ease, box-shadow .15s ease, background .2s ease;
+  }
+
+  .storagePicker button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(255, 0, 51, 0.25);
+    background: rgba(255,255,255,.1);
+  }
+
+  @keyframes toggleOverlay {
+    from { opacity: 0; transform: translateY(8px) scale(.998); }
+    to   { opacity: 1; transform: translateY(0)   scale(1); }
+  }
+
+  .totalPrice {
+    font-size: 20px;
+    font-weight: 500;
+    position: relative;
+  }
+
+  .shareBox { display: flex; gap: 6px; align-items: center; margin-left: auto; }
+  .shareInput { width: 360px; max-width: 55vw; padding: 6px 8px; border: 1px solid var(--stroke); border-radius: 8px; background: var(--panel); }
+  .error { color: #ff3055; font-weight: 600; }
+
+  .conflicts {
+    display: grid;
+    grid-template-columns: minmax($slot-min, 1fr);
+    position: absolute;
+    right: 50px;
+    bottom: 90px;
+    row-gap: 15px;
+    height: 560px;
+    max-height: 561px;
+    padding: 10px;
+    overflow-y: auto;
+
+    span {
+      color: red;
+      font-weight: 500;
+    }
+  }
+}
+
+.editBtn { width: 32px; height: 32px; }
+
+:global(.primaryBtn), :global(.ghostBtn), :global(.dangerBtn), :global(.copyBtn),
+.primaryBtn, .ghostBtn, .dangerBtn, .copyBtn {
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--stroke);
+  cursor: pointer;
+  background: var(--panel-strong);
+  transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+}
+
+.primaryBtn, :global(.primaryBtn) {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+
+.ghostBtn, :global(.ghostBtn) {
+  background: transparent;
+  color: var(--accent, #ff3055);
+  border-color: rgba(255,255,255,0.06);
+}
+
+.dangerBtn, :global(.dangerBtn) {
+  background: #ff3055;
+  color: #fff;
+  border-color: #ff3055;
+}
+
+.copyBtn, :global(.copyBtn) {
+  color: var(--accent, #ff3055);
+  background: var(--panel-strong);
+}
+
+.primaryBtn:hover, :global(.primaryBtn):hover,
+.ghostBtn:hover, :global(.ghostBtn):hover,
+.dangerBtn:hover, :global(.dangerBtn):hover,
+.copyBtn:hover, :global(.copyBtn):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.45);
+}
+
+.actionsBar {
+  position: relative;
+  top: -12px;
+  z-index: 50;
+  display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+  margin: 8px 0 16px;
+  padding: 10px; border: 1px solid var(--stroke); border-radius: 12px; background: var(--panel);
+  box-shadow: var(--glow);
+}
