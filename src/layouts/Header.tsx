@@ -31,6 +31,7 @@ function Header() {
     }, [componentsState.cpus, componentsState.gpus, componentsState.mbs, componentsState.psus, componentsState.cases, componentsState.szos, componentsState.airCoolings, componentsState.memories, componentsState.ssds, componentsState.hdd2_5, componentsState.hdd3_5]);
 
     const [debounced, setDebounced] = useState(query);
+
     useEffect(() => {
         const t = window.setTimeout(() => setDebounced(query.trim()), 200);
         return () => clearTimeout(t);
@@ -69,7 +70,6 @@ function Header() {
 
                 <nav className={s.nav}>
                     <Link to="/build">Конфигуратор</Link>
-                    <Link to="/builds">Мои сборки</Link>
                     <a href="https://example.com" target="_blank" rel="noreferrer">О проекте</a>
                 </nav>
 
@@ -88,22 +88,9 @@ function Header() {
                     {user ? (
                         user?.avatarUrl ? (
                             <button
+                                className={s.profileButton}
                                 onClick={() => navigate("/profile")}
                                 title={user.userName || user.login}
-                                style={{
-                                    minWidth: 42,
-                                    minHeight: 42,
-                                    maxWidth: 42,
-                                    maxHeight: 42,
-                                    borderRadius: '50%',
-                                    overflow: "hidden",
-                                    border: "1px solid var(--stroke)",
-                                    boxShadow: "var(--glow)",
-                                    background: "transparent",
-                                    cursor: "pointer",
-                                    padding: 0,
-                                    marginLeft: 8,
-                                }}
                             >
                                 <img
                                     src={user.avatarUrl}

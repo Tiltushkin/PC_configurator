@@ -19,6 +19,7 @@ import type {
     SSD, HDD2_5, HDD3_5, COOLING,
     BuildEx, StorageItem, SlotType, CompMaps, BuildResponse, PagedResult, ComponentsAllResponse, allComponents
 } from "../../shared/types/types";
+import RightOverlay from "../../components/RightOverlay/RightOverlay.tsx";
 
 const toMap = <T extends { Id: string }>(paged?: PagedResult<T>) =>
     new Map((paged?.items ?? []).map(i => [i.Id, i]));
@@ -119,7 +120,7 @@ export default function BuildViewPage() {
     }, [id, token]);
 
     const listBySlot = useMemo(() => {
-        if (!maps) return {};
+        if (!maps) return {} as Record<SlotType, any[]>;
         return {
             cpu: Array.from(maps.cpu.values()),
             gpu: Array.from(maps.gpu.values()),
@@ -495,34 +496,15 @@ export default function BuildViewPage() {
                         </div>
 
                         {isOwner && (
-                            <div className={`${bp.rightOverlay} ${overlayOpen ? bp.rightOverlayShow : ""}`}>
-                                <div className={bp.roHead}>
-                                    <div className={bp.roTitle}>{overlaySlot ? `Выбор ${slotLabel}` : "Выбор компонента"}</div>
-                                    <button className={bp.roClose} onClick={closeOverlay}>×</button>
-                                </div>
-
-                                {overlaySlot && (
-                                    <>
-                                        <div className={bp.roSearchRow}>
-                                            <input className={bp.input} placeholder={`Поиск ${slotLabel}`} value={query} onChange={(e)=> setQuery(e.target.value)} />
-                                        </div>
-                                        <div className={bp.roList}>
-                                            {filteredList.length === 0 && <div className={bp.empty}>Ничего не найдено</div>}
-                                            {filteredList.map((x: any) => (
-                                                <button key={x.Id} className={bp.roRow} onClick={() => onPick(x)}>
-                                                    <img className={bp.roRowImage} src={imgOf(x.Images)} alt="component" />
-                                                    <div className={bp.roRowMain}>
-                                                        <div className={bp.roRowTitle}>{x.Model}</div>
-                                                        <div className={bp.roRowMeta}>
-                                                        </div>
-                                                    </div>
-                                                    <div className={bp.roRowAside}>{x.Price ? `${x.Price.toLocaleString?.() ?? x.Price} ₸` : ""}</div>
-                                                </button>
-                                            ))}
-                                        </div>
-                                    </>
-                                )}
-                            </div>
+                            <RightOverlay
+                                open={overlayOpen}
+                                slot={overlaySlot}
+                                baseList={overlaySlot ? (listBySlot[overlaySlot] || []) : []}
+                                query={query}
+                                setQuery={setQuery}
+                                onPick={onPick}
+                                onClose={closeOverlay}
+                            />
                         )}
                     </div>
                 )}

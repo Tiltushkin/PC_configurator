@@ -102,17 +102,42 @@ export default function AdminPage() {
             payload.images = Array.isArray(payload.images) ? payload.images : utils.toArray(payload.images);
 
             let resp: any;
-            if (tab === "cpu") resp = await adminApi.addCpu(payload);
-            if (tab === "gpu") resp = await adminApi.addGpu(payload);
-            if (tab === "mb")  resp = await adminApi.addMb(payload);
-            if (tab === "psu") resp = await adminApi.addPsu(payload);
-            if (tab === "case") resp = await adminApi.addCase(payload);
-            if (tab === "szo") resp = await adminApi.addSzo(payload);
-            if (tab === "aircooling") resp = await adminApi.addAirCooling(payload);
-            if (tab === "memory") resp = await adminApi.addMemory(payload);
-            if (tab === "ssd") resp = await adminApi.addSsd(payload);
-            if (tab === "hdd2_5") resp = await adminApi.addHdd2_5(payload);
-            if (tab === "hdd3_5") resp = await adminApi.addHdd3_5(payload);setResult(`OK: ${resp?.id}`);
+            switch (tab) {
+                case "cpu":
+                    resp = await adminApi.addCpu(payload);
+                    break;
+                case "gpu":
+                    resp = await adminApi.addGpu(payload);
+                    break;
+                case "mb":
+                    resp = await adminApi.addMb(payload);
+                    break;
+                case "psu":
+                    resp = await adminApi.addPsu(payload);
+                    break;
+                case "case":
+                    resp = await adminApi.addCase(payload);
+                    break;
+                case "szo":
+                    resp = await adminApi.addSzo(payload);
+                    break;
+                case "aircooling":
+                    resp = await adminApi.addAirCooling(payload);
+                    break;
+                case "memory":
+                    resp = await adminApi.addMemory(payload);
+                    break;
+                case "ssd":
+                    resp = await adminApi.addSsd(payload);
+                    break;
+                case "hdd2_5":
+                    resp = await adminApi.addHdd2_5(payload);
+                    break;
+                case "hdd3_5":
+                    resp = await adminApi.addHdd3_5(payload);
+                    break;
+            }
+            setResult(`OK: ${resp?.id}`);
             setForm({ ...defaults[tab] });
             setImgInput(""); setLocalFiles([]);
         } catch (e: any) {
