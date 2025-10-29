@@ -15,12 +15,21 @@ function SlotCard({ selected, info, buildState, onClickItem, onClickBtn }: SlotP
         <div className={s.buildContainer__item} onClick={onClickItem}>
             <img src={selected ? selected.Images[0] : info.altImage} alt={info.alt} loading="lazy" decoding="async" style={selected?.Images[0] ? { width: '64px', height: '64px', minWidth: '64px', minHeight: '64px' } : { width: '48px', height: '48px' }}/>
             <p className={s.itemTitle}>
-                {selected?.Model} <br /> <span>{ utils.getComponentDescription(selected as allComponents) }</span>
+                {selected ? (
+                    <>
+                        {selected?.Model} <br /> <span>{ utils.getComponentDescription(selected as allComponents) }</span>
+                    </>
+                ): (
+                    <>
+                        {info.standardText}
+                    </>
+                )}
+                
             </p>
             {buildState.cpuId && (
                 <div className={s.subInfoContainer}>
                     <button className={s.clearBtn} onClick={onClickBtn}><span>×</span></button>
-                    <span className={s.itemPrice}>{selected?.Price?.toLocaleString?.()}₸</span>
+                    <span className={s.itemPrice}>{selected ? `${selected?.Price?.toLocaleString?.()}₸` : null}</span>
                 </div>
             )}
         </div>
