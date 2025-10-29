@@ -19,7 +19,7 @@ import type {
     SSD, HDD2_5, HDD3_5, COOLING,
     BuildEx, StorageItem, SlotType, CompMaps, BuildResponse, PagedResult, ComponentsAllResponse, allComponents
 } from "../../shared/types/types";
-import RightOverlay from "../../components/RightOverlay/RightOverlay.tsx";
+import ChooseComponentOverlay from "../../components/ChooseComponentOverlay/ChooseComponentOverlay.tsx";
 
 const toMap = <T extends { Id: string }>(paged?: PagedResult<T>) =>
     new Map((paged?.items ?? []).map(i => [i.Id, i]));
@@ -496,7 +496,7 @@ export default function BuildViewPage() {
                         </div>
 
                         {isOwner && (
-                            <RightOverlay
+                            <ChooseComponentOverlay
                                 open={overlayOpen}
                                 slot={overlaySlot}
                                 baseList={overlaySlot ? (listBySlot[overlaySlot] || []) : []}
