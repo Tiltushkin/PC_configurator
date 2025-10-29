@@ -503,3 +503,8 @@ export interface CompatibilityComponents {
     cooling?: WithMaybeId<COOLING> | null;
     memory?: WithMaybeId<Memory> | null;
 }
+
+export interface altInfoProp {
+    alt: string;
+    altImage: string;
+}
