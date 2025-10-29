@@ -507,4 +507,5 @@ export interface CompatibilityComponents {
 export interface altInfoProp {
     alt: string;
     altImage: string;
+    standardText: string;
 }
