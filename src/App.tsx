@@ -15,6 +15,7 @@ import type {AppDispatch} from "./store/store.ts";
 import {AdminMiddleware} from "./middleware/AdminMiddleware.tsx";
 import ComponentPage from "./pages/ComponentPage/ComponentPage.tsx";
 import { fetchComponentsThunk } from "./store/slices/componentsSlice.ts";
+import NotFound from "./pages/404/NotFound.tsx";
 
 function App() {
     const dispatch = useDispatch<AppDispatch>();
@@ -63,6 +64,8 @@ function App() {
         <Route element={<PageTransition><AdminMiddleware /></PageTransition>} >
             <Route path="/admin" element={<PageTransition><AdminPage /></PageTransition>} />
         </Route>
+
+        <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
       </Routes>
     </BrowserRouter>
   )
