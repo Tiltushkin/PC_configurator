@@ -1,22 +1,22 @@
-import {useDispatch, useSelector} from "react-redux";
-import type {AppDispatch, RootState} from "../../store/store";
 import {useNavigate} from "react-router-dom";
 import React, {useEffect, useMemo, useRef, useState} from "react";
-import {loadMeThunk, selectToken} from "../../store/slices/authSlice";
 import s from "./BuildPage.module.scss";
 import MainLayout from "../../layouts/MainLayout";
 import type {
     CPU, GPU, MB, PSU, SZO, AirCooling, CASE, Memory, SSD, HDD2_5, HDD3_5, BuildEx, SlotType, WithMaybeId,
-    StorageItem, allComponents
+    allComponents,
+    HDD
 } from "../../shared/types/types";
 import AnimatedBackground from "../../components/animations/AnimatedBackground.tsx";
 import utils from "../../shared/utils/utils";
 import { createBuild, updateBuild, shareBuild } from "../../api/buildsClient";
 import {checkCompatibility} from "../../shared/utils/compatibility.ts";
 import RightOverlay from "../../components/RightOverlay/RightOverlay.tsx";
+import { useSelector } from "react-redux";
+import type { RootState } from "../../store/store.ts";
+import SlotCard from "../../components/SlotCard/SlotCard.tsx";
 
 const BuildPage: React.FC = () => {
-    const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
     const [currentId, setCurrentId] = useState<string | null>(null);
     const [saving, setSaving] = useState(false);
@@ -77,7 +77,6 @@ const BuildPage: React.FC = () => {
         }
     };
 
-    const token = useSelector(selectToken);
     const componentsState = useSelector((st: RootState) => st.components);
 
     const [buildState, setBuildState] = useState<BuildEx>(() => {
@@ -108,17 +107,6 @@ const BuildPage: React.FC = () => {
     const addStorageRef = useRef<HTMLDivElement | null>(null);
 
     const [editMode, setEditMode] = useState(false);
-
-    useEffect(() => {
-        (async () => {
-            if (!token) {
-                navigate("/auth", { replace: true });
-                return;
-            }
-            try { await dispatch(loadMeThunk()).unwrap(); }
-            catch (e) { console.error("Не удалось загрузить пользователя:", e); }
-        })();
-    }, [token, dispatch, navigate]);
 
     const cpus = useMemo(() => (componentsState?.cpus?.items as WithMaybeId<CPU>[] | undefined) ?? [], [componentsState?.cpus?.items]);
     const gpus = useMemo(() => (componentsState?.gpus?.items as WithMaybeId<GPU>[] | undefined) ?? [], [componentsState?.gpus?.items]);
@@ -179,38 +167,6 @@ const BuildPage: React.FC = () => {
     }, [buildState.storages, storageMaps]);
 
     const compatibility = checkCompatibility({ CPU: selectedCpu, GPU: selectedGpu, MB: selectedMb, CASE: selectedCase, PSU: selectedPsu, cooling: selectedCooling, memory: selectedMemory }, resolvedStorages);
-
-    const migratedRef = useRef(false);
-    useEffect(() => {
-        if (migratedRef.current) return;
-        const hasOld = (buildState.ssdIds && buildState.ssdIds.length) || (buildState.hddIds && buildState.hddIds.length);
-        const listsReady = ssds.length || hdd2_5.length || hdd3_5.length;
-        if (!hasOld || !listsReady) return;
-
-        const newStorages: StorageItem[] = [];
-
-        const ssdCount = new Map<string, number>();
-        for (const id of buildState.ssdIds ?? []) ssdCount.set(id, (ssdCount.get(id) ?? 0) + 1);
-        ssdCount.forEach((qty, id) => {
-            if (storageMaps.ssd.has(id)) newStorages.push({ kind: "ssd", id, qty });
-        });
-
-        const hddCount = new Map<string, number>();
-        for (const id of buildState.hddIds ?? []) hddCount.set(id, (hddCount.get(id) ?? 0) + 1);
-        hddCount.forEach((qty, id) => {
-            if (storageMaps.hdd2_5.has(id)) newStorages.push({ kind: "hdd2_5", id, qty });
-            else if (storageMaps.hdd3_5.has(id)) newStorages.push({ kind: "hdd3_5", id, qty });
-            else newStorages.push({ kind: "hdd3_5", id, qty });
-        });
-
-        setBuildState(prev => ({
-            ...prev,
-            storages: [...(prev.storages ?? []), ...newStorages],
-            ssdIds: undefined,
-            hddIds: undefined
-        }));
-        migratedRef.current = true;
-    }, [buildState.ssdIds, buildState.hddIds, ssds.length, hdd2_5.length, hdd3_5.length, storageMaps]);
 
     useEffect(() => { utils.writeLastBuild(buildState); }, [buildState]);
 
@@ -304,6 +260,7 @@ const BuildPage: React.FC = () => {
             return { ...prev, storages: arr };
         });
     };
+
     const decStorageQty = (idx: number) => {
         setBuildState(prev => {
             const arr = [...(prev.storages ?? [])];
@@ -311,64 +268,6 @@ const BuildPage: React.FC = () => {
             return { ...prev, storages: arr };
         });
     };
-
-    const renderSlotText = (slot: Exclude<SlotType, "storage-ssd" | "storage-hdd2_5" | "storage-hdd3_5">) => {
-        if (slot === "cpu") return selectedCpu ? (
-            <>
-                {selectedCpu.Model} <br /> <span>• {selectedCpu.Socket}, {selectedCpu.TotalCores} x {selectedCpu.BasicFrequency} ГГц, L2 - {selectedCpu.CacheL2} МБ, L3 - {selectedCpu.CacheL3} МБ, 2 x {selectedCpu.MemoryFrequency}</span>
-            </>
-        ) : "Процессор";
-        if (slot === "gpu") return selectedGpu ? (
-            <>
-                {selectedGpu.Model} <br /> <span>• {selectedGpu.ConnectionInterface}, {selectedGpu.VideoRAM} ГБ {selectedGpu.MemoryType}, {selectedGpu.MemoryBusWidth} бит, {selectedGpu.VideoConnectors.join(", ")}</span>
-            </>
-        ) : "Видеокарта";
-        if (slot === "mb") return selectedMb ? (
-            <>
-                {selectedMb.Model} <br /> <span>• {selectedMb.Socket}, {selectedMb.CheapSet}, {selectedMb.MemorySlots}x{selectedMb.MemoryTypes}-{selectedMb.MaxMemoryFrequency}МГц, {selectedMb.PCISlots.join(", ")}, {selectedMb.FormFactor}</span>
-            </>
-        ) : "Материнская плата";
-        if (slot === "psu") return selectedPsu ? (
-            <>
-                {selectedPsu.Model} <br /> <span>• {selectedPsu.Power}Вт, {selectedPsu.Certificate ? `80+ ${selectedPsu.Certificate}` : null}, {selectedPsu.MainPowerConnector}, {selectedPsu.ProcessorPowerConnectors} CPU</span>
-            </>
-        ) : "Блок питания";
-        if (slot === "case") return selectedCase ? (
-            <>
-                {selectedCase.Model} <br /> <span>• {selectedCase.BodySize}, {selectedCase.CompatibleBoards.join(", ")}</span>
-            </>
-        ) : "Корпус";
-        if (slot === "cooling") return selectedCooling ? (
-            <>
-                {utils.isSZO(selectedCooling) && (
-                    <>
-                        {selectedCooling.Model} <br /> <span>• {selectedCooling.RadiatorMountingDimensions}, разъем помпы - {selectedCooling.PumpConnectionSocket}, радиатор - {selectedCooling.RadiatorMaterial}, TDP - {selectedCooling.TDP} Вт</span>
-                    </>
-                )}
-
-                {utils.isAirCooling(selectedCooling) && (
-                    <>
-                        {selectedCooling.Model} <br /> <span>• основание - {selectedCooling.BaseMaterial}, {selectedCooling.MaxRotationSpeed} об/мин, {selectedCooling.MaxNoiseLevel} дБ, {selectedCooling.FanConnector}, {selectedCooling.TDP} Вт</span>
-                    </>
-                )}
-            </>
-        ) : "Система охлаждения";
-        if (slot === "memory") return selectedMemory ? (
-            <>
-                {selectedMemory.Model} <br /> <span>• {selectedMemory.MemoryType}, {selectedMemory.OneModuleMemory} ГБ x {selectedMemory.TotalModules} шт, {selectedMemory.ClockFrequency} МГц, {selectedMemory.CL}(CL)-{selectedMemory.TRCD}-{selectedMemory.TRP}</span>
-            </>
-        ) : "Оперативная память";
-        return "Компонент";
-    };
-
-    const slotLabel = useMemo(() => {
-        switch (overlaySlot) {
-            case "storage-ssd": return "SSD (M.2)";
-            case "storage-hdd2_5": return "HDD 2.5\"";
-            case "storage-hdd3_5": return "HDD 3.5\"";
-            default: return overlaySlot ? overlaySlot.toUpperCase() : "компонента";
-        }
-    }, [overlaySlot]);
 
     const totalPrice = useMemo(() => {
         let diskPrice = 0;
@@ -450,82 +349,61 @@ const BuildPage: React.FC = () => {
                 <span className={s.totalPrice}>Общая стоимость сборки: {totalPrice}₸</span>
 
                 <div className={s.buildContainer}>
-                    <div className={s.buildContainer__item} onClick={() => openOverlay("cpu")}>
-                        <img src={selectedCpu ? selectedCpu.Images[0] : "/build/cpu.svg"} alt="CPU" loading="lazy" decoding="async" style={selectedCpu?.Images[0] ? { width: '64px', height: '64px', minWidth: '64px', minHeight: '64px' } : { width: '48px', height: '48px' }}/>
-                        <p className={s.itemTitle}>{renderSlotText("cpu")}</p>
-                        {buildState.cpuId && (
-                            <div className={s.subInfoContainer}>
-                                <button className={s.clearBtn} onClick={(e) => { e.stopPropagation(); clearSlot("cpu"); }}><span>×</span></button>
-                                <span className={s.itemPrice}>{selectedCpu?.Price?.toLocaleString?.()}₸</span>
-                            </div>
-                        )}
-                    </div>
+                    <SlotCard
+                        selected={selectedCpu as CPU}
+                        info={{ alt: "CPU", altImage: "/build/cpu.svg" }}
+                        buildState={buildState}
+                        onClickItem={() => openOverlay("cpu")}
+                        onClickBtn={(e) => { e.stopPropagation(); clearSlot("cpu"); }}
+                    />
 
-                    <div className={s.buildContainer__item} onClick={() => openOverlay("mb")}>
-                        <img src={selectedMb ? selectedMb.Images[0] : "/build/motherboard.svg"} alt="motherboard" loading="lazy" decoding="async" style={selectedMb?.Images[0] ? { width: '64px', height: '64px', minWidth: '64px', minHeight: '64px' } : { width: '48px', height: '48px' }}/>
-                        <p className={s.itemTitle}>{renderSlotText("mb")}</p>
-                        {buildState.mbId && (
-                            <div className={s.subInfoContainer}>
-                                <button className={s.clearBtn} onClick={(e) => { e.stopPropagation(); clearSlot("mb"); }}><span>×</span></button>
-                                <span className={s.itemPrice}>{selectedMb?.Price?.toLocaleString?.()}₸</span>
-                            </div>
-                        )}
-                    </div>
+                    <SlotCard
+                        selected={selectedMb as MB}
+                        info={{ alt: "MotherBoard", altImage: "/build/motherboard.svg" }}
+                        buildState={buildState}
+                        onClickItem={() => openOverlay("mb")}
+                        onClickBtn={(e) => { e.stopPropagation(); clearSlot("mb"); }}
+                    />
 
-                    <div className={s.buildContainer__item} onClick={() => openOverlay("psu")}>
-                        <img src={selectedPsu ? selectedPsu.Images[0] : "/build/power_supply.svg"} alt="power supply" loading="lazy" decoding="async" style={selectedPsu?.Images[0] ? { width: '64px', height: '64px', minWidth: '64px', minHeight: '64px' } : { width: '48px', height: '48px' }}/>
-                        <p className={s.itemTitle}>{renderSlotText("psu")}</p>
-                        {buildState.psuId && (
-                            <div className={s.subInfoContainer}>
-                                <button className={s.clearBtn} onClick={(e) => { e.stopPropagation(); clearSlot("psu"); }}><span>×</span></button>
-                                <span className={s.itemPrice}>{selectedPsu?.Price?.toLocaleString?.()}₸</span>
-                            </div>
-                        )}
-                    </div>
+                    <SlotCard
+                        selected={selectedPsu as PSU}
+                        info={{ alt: "PSU", altImage: "/build/power_supply.svg" }}
+                        buildState={buildState}
+                        onClickItem={() => openOverlay("psu")}
+                        onClickBtn={(e) => { e.stopPropagation(); clearSlot("psu"); }}
+                    />
 
-                    <div className={s.buildContainer__item} onClick={() => openOverlay("case")}>
-                        <img src={selectedCase ? selectedCase.Images[0] : "/build/pc_case.svg"} alt="pc case" loading="lazy" decoding="async" style={selectedCase?.Images[0] ? { width: '64px', height: '64px', minWidth: '64px', minHeight: '64px' } : { width: '48px', height: '48px' }}/>
-                        <p className={s.itemTitle}>{renderSlotText("case")}</p>
-                        {buildState.caseId && (
-                            <div className={s.subInfoContainer}>
-                                <button className={s.clearBtn} onClick={(e) => { e.stopPropagation(); clearSlot("case"); }}><span>×</span></button>
-                                <span className={s.itemPrice}>{selectedCase?.Price?.toLocaleString?.()}₸</span>
-                            </div>
-                        )}
-                    </div>
+                    <SlotCard
+                        selected={selectedCase as CASE}
+                        info={{ alt: "CASE", altImage: "/build/pc_case.svg" }}
+                        buildState={buildState}
+                        onClickItem={() => openOverlay("case")}
+                        onClickBtn={(e) => { e.stopPropagation(); clearSlot("case"); }}
+                    />
 
-                    <div className={s.buildContainer__item} onClick={() => openOverlay("gpu")}>
-                        <img src={selectedGpu ? selectedGpu.Images[0] : "/build/gpu.svg"} alt="GPU" loading="lazy" decoding="async" style={selectedGpu?.Images[0] ? { width: '64px', height: '64px', minWidth: '64px', minHeight: '64px' } : { width: '48px', height: '48px' }}/>
-                        <p className={s.itemTitle}>{renderSlotText("gpu")}</p>
-                        {buildState.gpuId && (
-                            <div className={s.subInfoContainer}>
-                                <button className={s.clearBtn} onClick={(e) => { e.stopPropagation(); clearSlot("gpu"); }}><span>×</span></button>
-                                <span className={s.itemPrice}>{selectedGpu?.Price?.toLocaleString?.()}₸</span>
-                            </div>
-                        )}
-                    </div>
+                    <SlotCard
+                        selected={selectedGpu as GPU}
+                        info={{ alt: "CASE", altImage: "/build/gpu.svg" }}
+                        buildState={buildState}
+                        onClickItem={() => openOverlay("gpu")}
+                        onClickBtn={(e) => { e.stopPropagation(); clearSlot("gpu"); }}
+                    />
 
-                    <div className={s.buildContainer__item} onClick={() => openOverlay("cooling")}>
-                        <img src={selectedCooling ? selectedCooling.Images[0] : "/build/cooling.svg"} alt="cooling" loading="lazy" decoding="async" style={selectedCooling?.Images[0] ? { width: '64px', height: '64px', minWidth: '64px', minHeight: '64px' } : { width: '48px', height: '48px' }}/>
-                        <p className={s.itemTitle}>{renderSlotText("cooling")}</p>
-                        {buildState.coolingId && (
-                            <div className={s.subInfoContainer}>
-                                <button className={s.clearBtn} onClick={(e) => { e.stopPropagation(); clearSlot("cooling"); }}><span>×</span></button>
-                                <span className={s.itemPrice}>{selectedCooling?.Price?.toLocaleString?.()}₸</span>
-                            </div>
-                        )}
-                    </div>
+                    <SlotCard
+                        selected={selectedCooling as (AirCooling | SZO)}
+                        info={{ alt: "Cooling", altImage: "/build/cooling.svg" }}
+                        buildState={buildState}
+                        onClickItem={() => openOverlay("cooling")}
+                        onClickBtn={(e) => { e.stopPropagation(); clearSlot("cooling"); }}
+                    />
 
-                    <div className={s.buildContainer__item} onClick={() => openOverlay("memory")}>
-                        <img src={selectedMemory ? selectedMemory.Images[0] : "/build/ram.svg"} alt="ram" loading="lazy" decoding="async" style={selectedMemory?.Images[0] ? { width: '64px', height: '64px', minWidth: '64px', minHeight: '64px' } : { width: '48px', height: '48px' }}/>
-                        <p className={s.itemTitle}>{renderSlotText("memory")}</p>
-                        {buildState.memoryId && (
-                            <div className={s.subInfoContainer}>
-                                <button className={s.clearBtn} onClick={(e) => { e.stopPropagation(); clearSlot("memory"); }}><span>×</span></button>
-                                <span className={s.itemPrice}>{selectedMemory?.Price?.toLocaleString?.()}₸</span>
-                            </div>
-                        )}
-                    </div>
+                    <SlotCard
+                        selected={selectedMemory as Memory}
+                        info={{ alt: "Memory", altImage: "/build/ram.svg" }}
+                        buildState={buildState}
+                        onClickItem={() => openOverlay("memory")}
+                        onClickBtn={(e) => { e.stopPropagation(); clearSlot("memory"); }}
+                    />
 
                     {resolvedStorages.map((st, idx) => {
                         const comp = st.item as allComponents | null;
@@ -546,9 +424,7 @@ const BuildPage: React.FC = () => {
                                 <p className={s.itemTitle}>
                                     {title}
                                     <br />
-                                    <span>• {st.kind === "ssd" ? `${(comp as SSD)?.PhysInterface}, чтение - ${(comp as SSD)?.MaxReadSpeed} Мбайт/сек, запись - ${(comp as SSD)?.MaxWriteSpeed} Мбайт/сек`
-                                        : st.kind === "hdd2_5" ? `${(comp as HDD2_5)?.Interface}, ${(comp as HDD2_5)?.SpindleRotationSpeed} об/мин, кэш-память ${(comp as HDD2_5)?.BufferSize} МБ`
-                                        : `${(comp as HDD3_5)?.Interface}, ${(comp as HDD3_5)?.InterfaceBandwidth / 1000} Гбит/с, ${(comp as HDD3_5)?.SpindleRotationSpeed} об/мин, кэш-память ${(comp as HDD3_5)?.CacheSize} МБ`}</span>
+                                    <span>{utils.getComponentDescription(comp as (SSD | HDD))}</span>
                                 </p>
 
                                 <div className={s.subInfoContainer}>
