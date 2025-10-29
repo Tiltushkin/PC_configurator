@@ -109,7 +109,7 @@ export class Utils {
         );
     }
 
-    getComponentDescription(component: unknown): string {
+    getComponentDescription(component: allComponents): string {
         if (this.isCPU(component)) return `${component.Socket}, ${component.TotalCores} x ${component.BasicFrequency} ГГц, L2 - ${component.CacheL2} МБ, L3 - ${component.CacheL3} МБ, 2 x ${component.MemoryFrequency}`;
         if (this.isGPU(component)) return `${component.ConnectionInterface}, ${component.VideoRAM} ГБ ${component.MemoryType}, ${component.MemoryBusWidth} бит, ${component.VideoConnectors.join(", ")}`;
         if (this.isMB(component)) return `${component.Socket}, ${component.CheapSet}, ${component.MemorySlots}x${component.MemoryTypes}-${component.MaxMemoryFrequency}МГц, ${component.PCISlots.join(", ")}, ${component.FormFactor}`;
