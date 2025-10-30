@@ -455,21 +455,37 @@ $pad-card: 12px;
   .shareInput { width: 360px; max-width: 55vw; padding: 6px 8px; border: 1px solid var(--stroke); border-radius: 8px; background: var(--panel); }
   .error { color: #ff3055; font-weight: 600; }
 
-  .conflicts {
-    display: grid;
-    grid-template-columns: minmax($slot-min, 1fr);
+  .conflictsContainer {
+    @extend .card;
     position: absolute;
     right: 50px;
-    bottom: 90px;
+    bottom: 100px;
     row-gap: 15px;
     height: 560px;
     max-height: 561px;
-    padding: 10px;
+    padding: 20px;
     overflow-y: auto;
 
-    span {
-      color: red;
-      font-weight: 500;
+    h3 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+
+    .conflicts, .warnings {
+      display: grid;
+      grid-template-columns: minmax($slot-min, 1fr);
+
+      span {
+        color: red;
+        font-size: 16px;
+        font-weight: 500;
+        max-width: 450px;
+      }
+    }
+
+    .conflicts {
+      margin-bottom: 10px;
     }
   }
 }
