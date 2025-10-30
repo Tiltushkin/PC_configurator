@@ -3,7 +3,7 @@ import s from "./Layout.module.scss";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
-import type { allComponents, CPU, GPU } from "../shared/types/types";
+import type { allComponents } from "../shared/types/types";
 import utils from "../shared/utils/utils";
 
 function Header() {
@@ -132,7 +132,6 @@ function Header() {
                             {debounced && filtered.length === 0 && (
                                 <div className={s.underInput__empty}>Ничего не найдено</div>
                             )}
-                            {status === "failed" && <div className={s.underInput__empty}>Ошибка: {error}</div>}
                         </div>
                     )}
                 </div>
