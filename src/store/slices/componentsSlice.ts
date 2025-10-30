@@ -152,4 +152,5 @@ const slice = createSlice({
 });
 
 export const { setFilters, setPage, setKind } = slice.actions;
+export const getComponentsError = (state: RootState) => state.components.error;
 export default slice.reducer;
