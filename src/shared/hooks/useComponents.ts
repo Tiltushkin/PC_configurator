@@ -5,9 +5,9 @@ import type { AirCooling, BuildEx, CASE, CPU, GPU, HDD2_5, HDD3_5, MB, Memory, P
 import utils from "../utils/utils";
 
 interface ComponentsProps {
-    buildState: BuildEx,
-    query: string;
-    overlaySlot: SlotType | null;
+    buildState?: BuildEx,
+    query?: string;
+    overlaySlot?: SlotType | null;
 }
 
 export default function useComponents({ buildState, query, overlaySlot } : ComponentsProps) {
@@ -26,32 +26,32 @@ export default function useComponents({ buildState, query, overlaySlot } : Compo
     const hdd3_5 = useMemo(() => (componentsState?.hdd3_5?.items as WithMaybeId<HDD3_5>[] | undefined) ?? [], [componentsState?.hdd3_5?.items]);
 
     const selectedCpu = useMemo(
-        () => buildState.cpuId ? cpus.find(c => utils.getAnyId(c) === buildState.cpuId) ?? null : null,
-        [buildState.cpuId, cpus]
+        () => buildState?.cpuId ? cpus.find(c => utils.getAnyId(c) === buildState?.cpuId) ?? null : null,
+        [buildState?.cpuId, cpus]
     );
     const selectedGpu = useMemo(
-        () => buildState.gpuId ? gpus.find(g => utils.getAnyId(g) === buildState.gpuId) ?? null : null,
-        [buildState.gpuId, gpus]
+        () => buildState?.gpuId ? gpus.find(g => utils.getAnyId(g) === buildState?.gpuId) ?? null : null,
+        [buildState?.gpuId, gpus]
     );
     const selectedMb = useMemo(
-        () => buildState.mbId ? mbs.find(g => utils.getAnyId(g) === buildState.mbId) ?? null : null,
-        [buildState.mbId, mbs]
+        () => buildState?.mbId ? mbs.find(g => utils.getAnyId(g) === buildState?.mbId) ?? null : null,
+        [buildState?.mbId, mbs]
     );
     const selectedPsu = useMemo(
-        () => buildState.psuId ? psus.find(g => utils.getAnyId(g) === buildState.psuId) ?? null : null,
-        [buildState.psuId, psus]
+        () => buildState?.psuId ? psus.find(g => utils.getAnyId(g) === buildState?.psuId) ?? null : null,
+        [buildState?.psuId, psus]
     );
     const selectedCase = useMemo(
-        () => buildState.caseId ? cases.find(g => utils.getAnyId(g) === buildState.caseId) ?? null : null,
-        [buildState.caseId, cases]
+        () => buildState?.caseId ? cases.find(g => utils.getAnyId(g) === buildState?.caseId) ?? null : null,
+        [buildState?.caseId, cases]
     );
     const selectedCooling = useMemo(
-        () => buildState.coolingId ? (szos.find(g => utils.getAnyId(g) === buildState.coolingId) || airCoolings.find(g => utils.getAnyId(g) === buildState.coolingId)) ?? null : null,
-        [buildState.coolingId, szos, airCoolings]
+        () => buildState?.coolingId ? (szos.find(g => utils.getAnyId(g) === buildState?.coolingId) || airCoolings.find(g => utils.getAnyId(g) === buildState.coolingId)) ?? null : null,
+        [buildState?.coolingId, szos, airCoolings]
     );
     const selectedMemory = useMemo(
-        () => buildState.memoryId ? memories.find(g => utils.getAnyId(g) === buildState.memoryId) ?? null : null,
-        [buildState.memoryId, memories]
+        () => buildState?.memoryId ? memories.find(g => utils.getAnyId(g) === buildState?.memoryId) ?? null : null,
+        [buildState?.memoryId, memories]
     );
 
     const storageMaps = useMemo(() => ({
@@ -61,7 +61,7 @@ export default function useComponents({ buildState, query, overlaySlot } : Compo
     }), [ssds, hdd2_5, hdd3_5]);
 
     const resolvedStorages = useMemo(() => {
-        const stor = buildState.storages ?? [];
+        const stor = buildState?.storages ?? [];
         return stor.map(st => {
             const item =
                 st.kind === "ssd" ? storageMaps.ssd.get(st.id)
@@ -69,10 +69,10 @@ export default function useComponents({ buildState, query, overlaySlot } : Compo
                         : storageMaps.hdd3_5.get(st.id);
             return { ...st, item: item ?? null };
         });
-    }, [buildState.storages, storageMaps]);
+    }, [buildState?.storages, storageMaps]);
 
     const list = useMemo(() => {
-        const q = query.trim().toLowerCase();
+        const q = query?.trim().toLowerCase();
 
         const filterBy = <T extends { Model: string; ManufacturerCode?: string }>(base: T[]) => {
             if (!q) return base;
