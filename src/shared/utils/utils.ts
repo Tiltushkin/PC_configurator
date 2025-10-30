@@ -1,4 +1,4 @@
-import type {allComponents, BuildEx, WithMaybeId, SZO, AirCooling, CPU, GPU, MB, PSU, CASE, Memory, SSD, HDD2_5, HDD3_5} from "../types/types.ts";
+import type {allComponents, BuildEx, WithMaybeId, SZO, AirCooling, CPU, GPU, MB, PSU, CASE, Memory, SSD, HDD2_5, HDD3_5, PagedResult, BuildResponse, CompMaps, StorageItem} from "../types/types.ts";
 
 export class Utils {
     toArray(val: any): string[] {
@@ -149,6 +149,45 @@ export class Utils {
         if (p.startsWith("/")) return base + p.replace(/^\//, "");
         return base + p;
     }
+
+    toMap = <T extends { Id: string }>(paged?: PagedResult<T>) =>
+        new Map((paged?.items ?? []).map(i => [i.Id, i]));
+
+    toBuildEx(b: BuildResponse, maps: CompMaps): BuildEx {
+        const storages: StorageItem[] = [];
+
+        const ssdCount = new Map<string, number>();
+        (b.ssdIds ?? []).forEach(id => ssdCount.set(id, (ssdCount.get(id) ?? 0) + 1));
+        ssdCount.forEach((qty, id) => storages.push({ kind: "ssd", id, qty }));
+
+        const hddCount = new Map<string, number>();
+        (b.hddIds ?? []).forEach(id => hddCount.set(id, (hddCount.get(id) ?? 0) + 1));
+        hddCount.forEach((qty, id) => {
+            if (maps.hdd2_5.has(id)) storages.push({ kind: "hdd2_5", id, qty });
+            else storages.push({ kind: "hdd3_5", id, qty });
+        });
+
+        return {
+            name: b.name ?? "Название сборки",
+            description: b.description ?? "",
+            cpuId: b.cpuId ?? undefined,
+            gpuId: b.gpuId ?? undefined,
+            mbId: b.mbId ?? undefined,
+            psuId: b.psuId ?? undefined,
+            caseId: b.caseId ?? undefined,
+            coolingId: b.coolingId ?? undefined,
+            memoryId: b.memoryId ?? undefined,
+            ssdIds: undefined,
+            hddIds: undefined,
+            isPublic: !!b.isPublic,
+            storages,
+        };
+    }
+
+    imgOf = (images?: string[] | null, fallback = "") => {
+        const first = images && images.length ? images[0] : null;
+        return this.resolveImageUrl(first) ?? (fallback || undefined);
+    };
 }
 
 export default new Utils();
