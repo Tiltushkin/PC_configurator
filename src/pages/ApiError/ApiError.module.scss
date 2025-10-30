@@ -26,7 +26,7 @@
 }
 
 .errorDescription {
-    font-size: 26px;
+    font-size: 28px;
     font-weight: 600;
 }
 
@@ -36,20 +36,8 @@
     color: rgb(194, 75, 75);
 }
 
-.backButton {
-    position: absolute;
-    left: 0;
-    top: 0;
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    color: inherit;
-    padding: 8px 12px;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-bottom: 18px;
-    transition: transform 0.12s ease, background 0.12s ease;
-
-    &:hover {
-        transform: translateY(-2px);
-    }
+.subDescription {
+    font-size: 20px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.65);
 }

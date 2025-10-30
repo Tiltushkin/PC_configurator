@@ -11,8 +11,8 @@ function NotFound() {
       <AnimatedBackground />
       <div className={s.NotFoundContainer}>
         <div className={s.errorContainer}>
-          <span className={s.errorDescription}>Ошибка</span>
-          <span className={s.errorTitle}>404</span>
+          <span className={s.errorDescription}>Такой страницы не существует</span>
+          <span className={`${s.errorTitle} glow`}>404</span>
         </div>
         <button className={s.backButton} type="button" onClick={() => navigate("/")}>← На главную</button>
       </div>

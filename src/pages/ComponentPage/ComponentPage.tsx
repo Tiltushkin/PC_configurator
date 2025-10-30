@@ -1,8 +1,6 @@
 import { useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import s from "./ComponentPage.module.scss";
-import { useDispatch, useSelector } from "react-redux";
-import { type RootState } from "../../store/store";
 
 import type {
   AirCooling,
@@ -19,6 +17,7 @@ import type {
   allComponents,
 } from "../../shared/types/types";
 import utils from "../../shared/utils/utils";
+import useComponents from "../../shared/hooks/useComponents";
 
 function Row({ label, value }: { label: string; value: unknown }) {
   if (
@@ -219,67 +218,9 @@ function ComponentPage() {
   const { componentID } = useParams();
   const navigate = useNavigate();
 
-  const componentsState = useSelector((st: RootState) => st.components);
-
-  const cpus = useMemo(
-    () =>
-      (componentsState?.cpus?.items as WithMaybeId<CPU>[] | undefined) ?? [],
-    [componentsState?.cpus?.items]
-  );
-  const gpus = useMemo(
-    () =>
-      (componentsState?.gpus?.items as WithMaybeId<GPU>[] | undefined) ?? [],
-    [componentsState?.gpus?.items]
-  );
-  const mbs = useMemo(
-    () => (componentsState?.mbs?.items as WithMaybeId<MB>[] | undefined) ?? [],
-    [componentsState?.mbs?.items]
-  );
-  const psus = useMemo(
-    () =>
-      (componentsState?.psus?.items as WithMaybeId<PSU>[] | undefined) ?? [],
-    [componentsState?.psus?.items]
-  );
-  const cases = useMemo(
-    () =>
-      (componentsState?.cases?.items as WithMaybeId<CASE>[] | undefined) ?? [],
-    [componentsState?.cases?.items]
-  );
-  const szos = useMemo(
-    () =>
-      (componentsState?.szos?.items as WithMaybeId<any>[] | undefined) ?? [],
-    [componentsState?.szos?.items]
-  );
-  const airCoolings = useMemo(
-    () =>
-      (componentsState?.airCoolings?.items as
-        | WithMaybeId<AirCooling>[]
-        | undefined) ?? [],
-    [componentsState?.airCoolings?.items]
-  );
-  const memories = useMemo(
-    () =>
-      (componentsState?.memories?.items as WithMaybeId<Memory>[] | undefined) ??
-      [],
-    [componentsState?.memories?.items]
-  );
-  const ssds = useMemo(
-    () =>
-      (componentsState?.ssds?.items as WithMaybeId<SSD>[] | undefined) ?? [],
-    [componentsState?.ssds?.items]
-  );
-  const hdd2_5 = useMemo(
-    () =>
-      (componentsState?.hdd2_5?.items as WithMaybeId<HDD2_5>[] | undefined) ??
-      [],
-    [componentsState?.hdd2_5?.items]
-  );
-  const hdd3_5 = useMemo(
-    () =>
-      (componentsState?.hdd3_5?.items as WithMaybeId<HDD3_5>[] | undefined) ??
-      [],
-    [componentsState?.hdd3_5?.items]
-  );
+  const {
+    cpus, gpus, mbs, psus, cases, szos, airCoolings, memories, ssds, hdd2_5, hdd3_5
+  } = useComponents({});
 
   const allComponents = useMemo(
     () => [
@@ -295,22 +236,10 @@ function ComponentPage() {
       ...hdd2_5,
       ...hdd3_5,
     ],
-    [
-      cpus,
-      gpus,
-      mbs,
-      psus,
-      cases,
-      szos,
-      airCoolings,
-      memories,
-      ssds,
-      hdd2_5,
-      hdd3_5,
-    ]
+    [cpus, gpus, mbs, psus, cases, szos, airCoolings, memories, ssds, hdd2_5, hdd3_5]
   );
 
-  const comp: allComponents = allComponents.find(
+  const comp: (WithMaybeId<allComponents> | undefined) = allComponents.find(
     (x) => (x.Id ?? (x as any).Id) == componentID
   );
 
