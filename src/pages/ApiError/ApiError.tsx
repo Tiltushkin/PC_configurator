@@ -8,9 +8,9 @@ function ApiError() {
       <AnimatedBackground />
       <div className={s.NotFoundContainer}>
         <div className={s.errorContainer}>
-          <span className={s.errorDescription}>Ошибка сервера</span>
+          <span className={s.errorDescription}>Сервис временно не доступен</span>
           <span className={`${s.errorTitle} glow`}>503</span>
-          <span className={s.subDescription}>Извиняемся за временные неудобства</span>
+          <span className={s.subDescription}>Извиняемся за неудобства</span>
         </div>
       </div>
     </MainLayout>
