@@ -1,2 +1,26 @@
 @use "../../styles/abstracts/variables" as *;
 
+@media (max-width: $media-telephone-small) {
+    h1 {
+        font-size: 26px !important;
+    }
+}
+
+@media (min-width: $media-telephone-medium) {
+    h1 { 
+        font-size: 28px !important;
+    }
+}
+
+@media (min-width: $media-telephone-big) {
+    h1 { 
+        line-height: 1.28;
+        font-size: 30px !important;
+    }
+}
+
+@media (min-width: $media-tablet) {
+    h1 { 
+        font-size: 36px !important;
+    }
+}
