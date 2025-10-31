@@ -1,4 +1,5 @@
 @use "../../styles/index" as *;
+@use "../../styles/abstracts/variables" as *;
 
 $slot-min: 520px;
 $slot-gap: 20px;
@@ -10,9 +11,13 @@ $pad-card: 12px;
   width: 100%;
   min-height: 100%;
 
-  * { box-sizing: border-box; }
+  * {
+    box-sizing: border-box;
+  }
 
-  h2 { width: fit-content; }
+  h2 {
+    width: fit-content;
+  }
 
   div[class="card"]:first-child {
     position: relative;
@@ -51,13 +56,13 @@ $pad-card: 12px;
       position: relative;
       width: 100%;
       min-height: 96px;
-      padding: $pad-card $pad-card*1.25;
+      padding: $pad-card $pad-card * 1.25;
 
       display: grid;
       grid-template-columns: auto 1fr auto;
       align-items: center;
       column-gap: 16px;
-      transition: transform .3s ease, box-shadow .2s ease;
+      transition: transform 0.3s ease, box-shadow 0.2s ease;
 
       &:hover {
         cursor: pointer;
@@ -107,8 +112,8 @@ $pad-card: 12px;
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        background: rgba(255,255,255,.06);
-        border: 1px solid rgba(255,255,255,.18);
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.18);
         border-radius: 10px;
         padding: 4px 6px;
         margin-right: 80px;
@@ -123,7 +128,9 @@ $pad-card: 12px;
           cursor: pointer;
           border-radius: 8px;
 
-          &:hover { background: rgba(255,255,255,.08); }
+          &:hover {
+            background: rgba(255, 255, 255, 0.08);
+          }
         }
         .qtyVal {
           min-width: 20px;
@@ -163,7 +170,10 @@ $pad-card: 12px;
           transform: translate(-50%, -50%);
         }
 
-        &:hover { color: #fff; background: rgba(255,255,255,.08); }
+        &:hover {
+          color: #fff;
+          background: rgba(255, 255, 255, 0.08);
+        }
       }
     }
   }
@@ -171,24 +181,24 @@ $pad-card: 12px;
   .rightOverlay {
     position: fixed;
     inset: 0;
-    z-index: 2500;
+    z-index: 2500 !important;
     display: flex;
     align-items: center;
     justify-content: center;
     pointer-events: none;
     opacity: 0;
-    transition: opacity .25s ease;
+    transition: opacity 0.25s ease;
   }
 
   .rightOverlayBackdrop {
     position: absolute;
     inset: 0;
-    background: rgba(7,8,10,0.6);
+    background: rgba(7, 8, 10, 0.6);
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
-    z-index: 2450;
+    z-index: 2400 !important;
     opacity: 0;
-    transition: opacity .25s ease;
+    transition: opacity 0.25s ease;
   }
 
   .rightOverlayShow {
@@ -210,18 +220,24 @@ $pad-card: 12px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.6), 0 2px 8px rgba(255, 0, 51, 0.06);
-    border: 1px solid rgba(255,255,255,0.04);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6), 0 2px 8px rgba(255, 0, 51, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.04);
     pointer-events: auto;
     transform-origin: center;
-    animation: togglePanel .28s cubic-bezier(.2,.9,.3,1);
+    animation: togglePanel 0.28s cubic-bezier(0.2, 0.9, 0.3, 1);
     padding: 10px;
     top: 25px;
   }
 
   @keyframes togglePanel {
-    from { transform: translateY(8px) scale(.998); opacity: 0; }
-    to { transform: translateY(0) scale(1); opacity: 1; }
+    from {
+      transform: translateY(8px) scale(0.998);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
   }
 
   .roBody {
@@ -237,7 +253,7 @@ $pad-card: 12px;
     width: 320px;
     padding-right: 8px;
     overflow: auto;
-    border-right: 1px solid rgba(255,255,255,0.03);
+    border-right: 1px solid rgba(255, 255, 255, 0.03);
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -276,19 +292,20 @@ $pad-card: 12px;
     grid-template-columns: auto 1fr auto;
     gap: 16px;
     align-items: center;
-    background: rgba(255,255,255,.03);
-    border: 1px solid rgba(255,255,255,.08);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 12px;
     padding: 10px;
     cursor: pointer;
-    transition: box-shadow .20s ease, transform .18s ease, background .15s ease;
+    transition: box-shadow 0.2s ease, transform 0.18s ease,
+      background 0.15s ease;
     position: relative;
   }
 
   .roRow:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 22px rgba(0,0,0,0.5), 0 0 8px rgba(255,0,51,0.12);
-    background: rgba(255,255,255,.04);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.5), 0 0 8px rgba(255, 0, 51, 0.12);
+    background: rgba(255, 255, 255, 0.04);
   }
 
   .roRowMain {
@@ -366,7 +383,7 @@ $pad-card: 12px;
 
   .roClose {
     background: transparent;
-    border: 1px solid rgba(255,255,255,.16);
+    border: 1px solid rgba(255, 255, 255, 0.16);
     border-radius: 10px;
     color: #fff;
     width: 30px;
@@ -379,34 +396,55 @@ $pad-card: 12px;
     transform: translateY(5px);
   }
 
-  .roClose:hover { background: rgba(255,255,255,.06); }
+  .roClose:hover {
+    background: rgba(255, 255, 255, 0.06);
+  }
 
   .roSearchRow {
     margin: 0 16px 8px 16px;
   }
 
-  .input, .textarea {
-    background: rgba(255,255,255,.06);
-    border: 1px solid rgba(255,255,255,.18);
+  .input,
+  .textarea {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.18);
     border-radius: 12px;
     padding: 10px 12px;
     color: #fff;
     width: 100%;
   }
 
-  .input:focus, .textarea:focus {
+  .input:focus,
+  .textarea:focus {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(255,255,255,.06);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.06);
     background: rgb(36, 35, 35);
   }
 
-  .editWrap { display: grid; gap: 10px; min-width: 560px; }
-  .editRow {
-    display: grid; grid-template-columns: 100px 1fr; gap: 10px; align-items: center;
-    label { color: #bdbdbd; }
+  .editWrap {
+    display: grid;
+    gap: 10px;
+    min-width: 560px;
   }
-  .switchRow { display: inline-flex; align-items: center; gap: 8px; user-select: none; }
-  .editActions { display: flex; justify-content: flex-end; }
+  .editRow {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 10px;
+    align-items: center;
+    label {
+      color: #bdbdbd;
+    }
+  }
+  .switchRow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    user-select: none;
+  }
+  .editActions {
+    display: flex;
+    justify-content: flex-end;
+  }
 
   .storagePicker {
     position: absolute;
@@ -415,34 +453,41 @@ $pad-card: 12px;
     transform: translateY(-8px);
     display: grid;
     gap: 6px;
-    background: rgba(10,10,15,.96);
-    border: 1px solid rgba(255,255,255,.18);
+    background: rgba(10, 10, 15, 0.96);
+    border: 1px solid rgba(255, 255, 255, 0.18);
     border-radius: 12px;
     padding: 10px;
     z-index: 2600;
-    box-shadow: 0 10px 30px rgba(0,0,0,.35);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
   }
 
   .storagePicker button {
-    background: rgba(255,255,255,.06);
-    border: 1px solid rgba(255,255,255,.18);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.18);
     color: #fff;
     border-radius: 10px;
     padding: 8px 10px;
     cursor: pointer;
     text-align: left;
-    transition: transform .15s ease, box-shadow .15s ease, background .2s ease;
+    transition: transform 0.15s ease, box-shadow 0.15s ease,
+      background 0.2s ease;
   }
 
   .storagePicker button:hover {
     transform: translateY(-1px);
     box-shadow: 0 6px 14px rgba(255, 0, 51, 0.25);
-    background: rgba(255,255,255,.1);
+    background: rgba(255, 255, 255, 0.1);
   }
 
   @keyframes toggleOverlay {
-    from { opacity: 0; transform: translateY(8px) scale(.998); }
-    to   { opacity: 1; transform: translateY(0)   scale(1); }
+    from {
+      opacity: 0;
+      transform: translateY(8px) scale(0.998);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
   }
 
   .totalPrice {
@@ -451,15 +496,30 @@ $pad-card: 12px;
     position: relative;
   }
 
-  .shareBox { display: flex; gap: 6px; align-items: center; margin-left: auto; }
-  .shareInput { width: 360px; max-width: 55vw; padding: 6px 8px; border: 1px solid var(--stroke); border-radius: 8px; background: var(--panel); }
-  .error { color: #ff3055; font-weight: 600; }
+  .shareBox {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    margin-left: auto;
+  }
+  .shareInput {
+    width: 360px;
+    max-width: 55vw;
+    padding: 6px 8px;
+    border: 1px solid var(--stroke);
+    border-radius: 8px;
+    background: var(--panel);
+  }
+  .error {
+    color: #ff3055;
+    font-weight: 600;
+  }
 
   .conflictsContainer {
     @extend .card;
     position: absolute;
-    right: 50px;
-    bottom: 100px;
+    right: -600px;
+    bottom: 45px;
     row-gap: 15px;
     height: 560px;
     max-height: 561px;
@@ -472,7 +532,8 @@ $pad-card: 12px;
       margin-bottom: 15px;
     }
 
-    .conflicts, .warnings {
+    .conflicts,
+    .warnings {
       display: grid;
       grid-template-columns: minmax($slot-min, 1fr);
 
@@ -490,55 +551,96 @@ $pad-card: 12px;
   }
 }
 
-.editBtn { width: 32px; height: 32px; }
+.editBtn {
+  width: 32px;
+  height: 32px;
+}
 
-:global(.primaryBtn), :global(.ghostBtn), :global(.dangerBtn), :global(.copyBtn),
-.primaryBtn, .ghostBtn, .dangerBtn, .copyBtn {
+:global(.primaryBtn),
+:global(.ghostBtn),
+:global(.dangerBtn),
+:global(.copyBtn),
+.primaryBtn,
+.ghostBtn,
+.dangerBtn,
+.copyBtn {
   padding: 8px 12px;
   border-radius: 10px;
   border: 1px solid var(--stroke);
   cursor: pointer;
   background: var(--panel-strong);
-  transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
 }
 
-.primaryBtn, :global(.primaryBtn) {
+.primaryBtn,
+:global(.primaryBtn) {
   background: var(--primary);
   border-color: var(--primary);
   color: #fff;
 }
 
-.ghostBtn, :global(.ghostBtn) {
+.ghostBtn,
+:global(.ghostBtn) {
   background: transparent;
   color: var(--accent, #ff3055);
-  border-color: rgba(255,255,255,0.06);
+  border-color: rgba(255, 255, 255, 0.06);
 }
 
-.dangerBtn, :global(.dangerBtn) {
+.dangerBtn,
+:global(.dangerBtn) {
   background: #ff3055;
   color: #fff;
   border-color: #ff3055;
 }
 
-.copyBtn, :global(.copyBtn) {
+.copyBtn,
+:global(.copyBtn) {
   color: var(--accent, #ff3055);
   background: var(--panel-strong);
 }
 
-.primaryBtn:hover, :global(.primaryBtn):hover,
-.ghostBtn:hover, :global(.ghostBtn):hover,
-.dangerBtn:hover, :global(.dangerBtn):hover,
-.copyBtn:hover, :global(.copyBtn):hover {
+.primaryBtn:hover,
+:global(.primaryBtn):hover,
+.ghostBtn:hover,
+:global(.ghostBtn):hover,
+.dangerBtn:hover,
+:global(.dangerBtn):hover,
+.copyBtn:hover,
+:global(.copyBtn):hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 18px rgba(0,0,0,0.45);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.45);
 }
 
 .actionsBar {
   position: relative;
   top: -12px;
   z-index: 50;
-  display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
   margin: 8px 0 16px;
-  padding: 10px; border: 1px solid var(--stroke); border-radius: 12px; background: var(--panel);
+  padding: 10px;
+  border: 1px solid var(--stroke);
+  border-radius: 12px;
+  background: var(--panel);
   box-shadow: var(--glow);
+}
+
+@media (max-width: $media-telephone-big) {
+  .configContainer .rightOverlay {
+    position: absolute;
+  }
+
+  .roPanel {
+    min-width: 550px !important;
+  }
+
+  .roBody {
+    grid-template-columns: 200px 1fr !important;
+  }
+
+  .roFilters {
+    width: 200px !important;
+  }
 }
