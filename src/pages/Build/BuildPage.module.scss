@@ -212,7 +212,7 @@ $pad-card: 12px;
 
   .roPanel {
     position: relative;
-    z-index: 2501;
+    z-index: 2600 !important;
     width: min(1100px, 96vw);
     height: min(84vh, 920px);
     background: var(--card-bg, #0b0b0b);
