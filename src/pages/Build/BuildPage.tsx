@@ -211,39 +211,39 @@ const BuildPage: React.FC = () => {
                             </div>
                         )}
                     </div>
+
+                    {(compatibility.conflicts.length > 0 || compatibility.warnings.length > 0) && (
+                        <div className={s.conflictsContainer}>
+                            {compatibility.conflicts.length > 0 && (
+                                <>
+                                    <h3>Конфликты</h3>
+                                    <div className={s.conflicts}>
+                                        {compatibility.conflicts.map(conflict => (
+                                            <>
+                                                <span>{conflict.message}</span>
+                                                <br />
+                                            </>
+                                        ))}
+                                    </div>
+                                </>
+                            )}
+
+                            {compatibility.warnings.length > 0 && (
+                                <>
+                                    <h3>Предупреждения</h3>
+                                    <div className={s.warnings}>
+                                        {compatibility.warnings.map(warn => (
+                                            <>
+                                                <span>{warn}</span>
+                                                <br />
+                                            </>
+                                        ))}
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                    )}
                 </div>
-
-                {(compatibility.conflicts.length > 0 || compatibility.warnings.length > 0) && (
-                    <div className={s.conflictsContainer}>
-                        {compatibility.conflicts.length > 0 && (
-                            <>
-                                <h3>Конфликты</h3>
-                                <div className={s.conflicts}>
-                                    {compatibility.conflicts.map(conflict => (
-                                        <>
-                                            <span>{conflict.message}</span>
-                                            <br />
-                                        </>
-                                    ))}
-                                </div>
-                            </>
-                        )}
-
-                        {compatibility.warnings.length > 0 && (
-                            <>
-                                <h3>Предупреждения</h3>
-                                <div className={s.warnings}>
-                                    {compatibility.warnings.map(warn => (
-                                        <>
-                                            <span>{warn}</span>
-                                            <br />
-                                        </>
-                                    ))}
-                                </div>
-                            </>
-                        )}
-                    </div>
-                )}
 
                 <ChooseComponentOverlay
                     open={overlayOpen}
