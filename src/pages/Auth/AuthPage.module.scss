@@ -1,56 +1,227 @@
+@use "../../styles/index" as *;
+@use "../../styles/abstracts/variables" as *;
 
 .wrapper {
   min-height: calc(100dvh - 120px);
   display: grid;
   place-items: center;
-  padding: 24px;
+  padding: 20px;
+  box-sizing: border-box;
 }
+
 .card {
-  width: min(920px, 100%);
+  width: 100%;
+  max-width: 920px;
   border: 1px solid var(--stroke);
-  border-radius: 20px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.00));
-  box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+  border-radius: 16px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(255, 255, 255, 0)
+  );
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
   overflow: hidden;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
+  gap: 0;
+  transition: border-radius 0.18s ease, box-shadow 0.18s ease,
+    transform 0.18s ease;
 }
+
 .left {
-  padding: 28px;
+  padding: 20px;
   display: grid;
   align-content: start;
-  gap: 18px;
+  gap: 14px;
+  box-sizing: border-box;
 }
+
 .right {
   position: relative;
-  background:
-    radial-gradient(600px 240px at 60% 20%, rgba(255,0,51,0.18), transparent 60%),
-    linear-gradient(180deg, rgba(255,0,51,0.12), rgba(255,0,51,0.05));
-  border-left: 1px solid var(--stroke);
+  border-top: 1px solid var(--stroke);
+  background: radial-gradient(
+      600px 240px at 60% 20%,
+      rgba(255, 0, 51, 0.18),
+      transparent 60%
+    ),
+    linear-gradient(180deg, rgba(255, 0, 51, 0.12), rgba(255, 0, 51, 0.05));
+  min-height: 180px;
 }
+
 .rightOverlay {
-  position: absolute; inset: 0;
-  background:
-    linear-gradient(0deg, rgba(0,0,0,0.5), rgba(0,0,0,0.3));
- padding: 24px 20px; box-sizing: border-box; gap: 18px; }
-.field { display: grid; gap: 8px; }
-.row { display: grid; gap: 12px; }
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3));
+  padding: 18px 16px;
+  box-sizing: border-box;
+  display: grid;
+  gap: 14px;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+}
+.row {
+  display: grid;
+  gap: 12px;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+}
 .tabs {
   display: inline-grid;
   grid-auto-flow: column;
   gap: 8px;
-  background: rgba(255,255,255,0.04);
+  background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--stroke);
   padding: 6px;
   border-radius: 12px;
 }
 .tab {
-  padding: 10px 14px; border-radius: 8px; cursor: pointer;
-  transition: .2s ease;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.15s ease;
+  background: transparent;
+  border: 1px solid transparent;
 }
 .tab[data-active="true"] {
-  background: rgba(255,0,51,0.18);
-  border: 1px solid rgba(255,0,51,0.5);
+  background: rgba(255, 0, 51, 0.18);
+  border: 1px solid rgba(255, 0, 51, 0.5);
   box-shadow: var(--glow);
 }
-.hint { font-size: 12px; opacity: .7; }
+.hint {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--stroke);
+  background: transparent;
+}
+
+.card .left h2 {
+  font-size: 20px;
+  margin: 0;
+}
+.card .left p.hint {
+  margin: 0;
+}
+
+@media (max-width: $media-telephone-medium) {
+  .wrapper {
+    padding: 12px;
+  }
+  .card {
+    border-radius: 12px;
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.48);
+  }
+  .left {
+    padding: 16px;
+    gap: 12px;
+  }
+  .row {
+    gap: 10px;
+    grid-auto-flow: row;
+  }
+}
+
+@media (max-width: $media-telephone-big) {
+  .card {
+    grid-template-columns: 1fr;
+  }
+  .right {
+    display: none;
+  }
+}
+
+@media (min-width: ($media-telephone-big + 1)) and (max-width: $media-tablet) {
+  .card {
+    grid-template-columns: 1fr 420px;
+    border-radius: 16px;
+  }
+  .left {
+    padding: 20px;
+  }
+  .right {
+    min-height: auto;
+    border-left: 1px solid var(--stroke);
+    border-top: 0;
+  }
+  .rightOverlay {
+    padding: 20px;
+  }
+  .row {
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+  }
+}
+
+@media (min-width: $media-tablet + 1) and (max-width: $media-laptop) {
+  .card {
+    grid-template-columns: 1fr 360px;
+    max-width: 840px;
+    border-radius: 18px;
+  }
+  .left {
+    padding: 22px;
+    gap: 16px;
+  }
+  .rightOverlay {
+    padding: 22px;
+  }
+}
+
+@media (min-width: $media-laptop-l) {
+  .card {
+    grid-template-columns: 1fr 460px;
+    max-width: 920px;
+    border-radius: 20px;
+  }
+  .left {
+    padding: 28px;
+    gap: 18px;
+  }
+  .rightOverlay {
+    padding: 28px;
+    gap: 18px;
+  }
+  .right {
+    min-height: 220px;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+  }
+}
+
+@media (min-width: $media-4k) {
+  .card {
+    max-width: 1200px;
+    grid-template-columns: 1fr 560px;
+  }
+  .left {
+    padding: 36px;
+  }
+  .rightOverlay {
+    padding: 32px;
+  }
+}
+
+.tab:focus,
+.input:focus,
+button:focus {
+  outline: 3px solid rgba(26, 188, 156, 0.12);
+  outline-offset: 2px;
+  border-color: rgba(26, 188, 156, 0.25);
+}
+
+@media (max-width: $media-telephone-medium) {
+  .card.hide-right .right {
+    display: none;
+  }
+}

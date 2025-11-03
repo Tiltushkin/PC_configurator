@@ -18,6 +18,8 @@ import type {
 } from "../../shared/types/types";
 import utils from "../../shared/utils/utils";
 import useComponents from "../../shared/hooks/useComponents";
+import MainLayout from "../../layouts/MainLayout";
+import AnimatedBackground from "../../components/animations/AnimatedBackground";
 
 function Row({ label, value }: { label: string; value: unknown }) {
   if (
@@ -259,47 +261,50 @@ function ComponentPage() {
   const img = comp?.Images?.[0] ?? undefined;
 
   return (
-    <div className={s.componentContainer}>
-      <button className={s.backBtn} onClick={() => navigate("/")}>
-        ← На главную
-      </button>
+    <>
+      <AnimatedBackground />
+      <div className={s.componentContainer}>
+        <button className={s.backBtn} onClick={() => navigate("/")}>
+          ← На главную
+        </button>
 
-      <div className={s.component}>
-        <div className={s.left}>
-          <div className={s.imageWrap}>
-            {img ? (
-              <img
-                src={img}
-                alt={comp.Model}
-                className={s.image}
-                loading="lazy"
-                decoding="async"
-              />
-            ) : (
-              <div className={s.noImage}>Нет изображения</div>
-            )}
+        <div className={s.component}>
+          <div className={s.left}>
+            <div className={s.imageWrap}>
+              {img ? (
+                <img
+                  src={img}
+                  alt={comp.Model}
+                  className={s.image}
+                  loading="lazy"
+                  decoding="async"
+                />
+              ) : (
+                <div className={s.noImage}>Нет изображения</div>
+              )}
+            </div>
+            <div className={s.badges}>
+              <div className={s.model}>{comp.Model}</div>
+              <div className={s.price}>
+                {comp.Price ? `${comp.Price} ₸` : "Цена не указана"}
+              </div>
+            </div>
           </div>
-          <div className={s.badges}>
-            <div className={s.model}>{comp.Model}</div>
-            <div className={s.price}>
-              {comp.Price ? `${comp.Price} ₸` : "Цена не указана"}
+
+          <div className={s.right}>
+            <div className={s.card}>
+              <h3 className={s.sectionTitle}>Общее</h3>
+              <div className={s.specsGrid}>{renderBase(comp)}</div>
+            </div>
+
+            <div className={s.card}>
+              <h3 className={s.sectionTitle}>Спецификации</h3>
+              <div className={s.specsGrid}>{renderTypeSpecs(comp)}</div>
             </div>
           </div>
         </div>
-
-        <div className={s.right}>
-          <div className={s.card}>
-            <h3 className={s.sectionTitle}>Общее</h3>
-            <div className={s.specsGrid}>{renderBase(comp)}</div>
-          </div>
-
-          <div className={s.card}>
-            <h3 className={s.sectionTitle}>Спецификации</h3>
-            <div className={s.specsGrid}>{renderTypeSpecs(comp)}</div>
-          </div>
-        </div>
       </div>
-    </div>
+    </>
   );
 }
 

@@ -2,7 +2,8 @@ import MainLayout from "../../layouts/MainLayout";
 import AnimatedBackground from "../../components/animations/AnimatedBackground.tsx";
 import {Link} from "react-router-dom";
 import {useSelector} from "react-redux";
-import {selectUser} from "../../store/slices/authSlice.ts";
+import { selectUser } from "../../store/slices/authSlice.ts";
+import "./MainPage.module.scss";
 
 const MainPage = () => {
     const profile = useSelector(selectUser);

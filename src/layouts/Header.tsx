@@ -2,33 +2,25 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import s from "./Layout.module.scss";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import type { RootState } from "../store/store";
 import type { allComponents } from "../shared/types/types";
 import utils from "../shared/utils/utils";
+import { selectUser } from "../store/slices/authSlice";
+import useComponents from "../shared/hooks/useComponents";
 
 function Header() {
     const navigate = useNavigate();
-    const { user } = useSelector((st: RootState) => st.auth);
-    const componentsState = useSelector((st: RootState) => st.components);
+    const user = useSelector(selectUser);
+    const {
+        cpus, gpus, mbs, psus, cases, szos, airCoolings, memories, ssds, hdd2_5, hdd3_5
+    } = useComponents({});
 
     const [query, setQuery] = useState("");
     const [open, setOpen] = useState(false);
     const blurTimer = useRef<number | null>(null);
 
     const items: (allComponents)[] = useMemo(() => {
-        const c = componentsState.cpus?.items ?? [];
-        const g = componentsState.gpus?.items ?? [];
-        const m = componentsState.mbs?.items ?? [];
-        const p = componentsState.psus?.items ?? [];
-        const ca = componentsState.cases?.items ?? [];
-        const s = componentsState.szos?.items ?? [];
-        const a = componentsState.airCoolings?.items ?? [];
-        const mem = componentsState.memories?.items ?? [];
-        const ssd = componentsState.ssds?.items ?? [];
-        const hdd2 = componentsState.hdd2_5?.items ?? [];
-        const hdd3 = componentsState.hdd3_5?.items ?? [];
-        return [...c, ...g, ...m, ...p, ...ca, ...s, ...a, ...mem, ...ssd, ...hdd2, ...hdd3];
-    }, [componentsState.cpus, componentsState.gpus, componentsState.mbs, componentsState.psus, componentsState.cases, componentsState.szos, componentsState.airCoolings, componentsState.memories, componentsState.ssds, componentsState.hdd2_5, componentsState.hdd3_5]);
+        return [...cpus, ...gpus, ...mbs, ...psus, ...cases, ...szos, ...airCoolings, ...memories, ...ssds, ...hdd2_5, ...hdd3_5];
+    }, [cpus, gpus, mbs, psus, cases, szos, airCoolings, memories, ssds, hdd2_5, hdd3_5]);
 
     const [debounced, setDebounced] = useState(query);
 
