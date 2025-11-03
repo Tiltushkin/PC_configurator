@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import utils from "../../shared/utils/utils";
 import ChooseComponentOverlay from "../../components/ChooseComponentOverlay/ChooseComponentOverlay.tsx";
 import useBuildView from "../../shared/hooks/useBuildView.ts";
+import { checkCompatibility } from "../../shared/utils/compatibility.ts";
 
 export default function BuildViewPage() {
 
@@ -15,6 +16,11 @@ export default function BuildViewPage() {
         addStorageRef, storagePickerOpen, setStoragePickerOpen, overlayOpen, overlaySlot,
         listBySlot, query, setQuery, onPick, closeOverlay
     } = useBuildView();
+
+    const compatibility = checkCompatibility({
+        CPU: selected.cpu, GPU: selected.gpu, MB: selected.mb, CASE: selected.case,
+        PSU: selected.psu, cooling: selected.cooling, memory: selected.memory
+    }, resolvedStorages);
 
     return (
         <MainLayout>
@@ -213,6 +219,38 @@ export default function BuildViewPage() {
                                 </div>
                             )}
                         </div>
+
+                        {(compatibility.conflicts.length > 0 || compatibility.warnings.length > 0) && (
+                            <div className={bp.conflictsContainer}>
+                                {compatibility.conflicts.length > 0 && (
+                                    <>
+                                        <h3>Конфликты</h3>
+                                        <div className={bp.conflicts}>
+                                            {compatibility.conflicts.map(conflict => (
+                                                <>
+                                                    <span>{conflict.message}</span>
+                                                    <br />
+                                                </>
+                                            ))}
+                                        </div>
+                                    </>
+                                )}
+
+                                {compatibility.warnings.length > 0 && (
+                                    <>
+                                        <h3>Предупреждения</h3>
+                                        <div className={bp.warnings}>
+                                            {compatibility.warnings.map(warn => (
+                                                <>
+                                                    <span>{warn}</span>
+                                                    <br />
+                                                </>
+                                            ))}
+                                        </div>
+                                    </>
+                                )}
+                            </div>
+                        )}
 
                         {isOwner && (
                             <ChooseComponentOverlay
