@@ -517,36 +517,51 @@ $pad-card: 12px;
 
   .conflictsContainer {
     @extend .card;
-    position: absolute;
-    right: -600px;
-    bottom: 45px;
-    row-gap: 15px;
-    height: 560px;
-    max-height: 561px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
     padding: 20px;
+    box-sizing: border-box;
+    width: 360px;
+    max-height: calc(100vh - 160px);
     overflow-y: auto;
+    row-gap: 15px;
+    border-radius: 12px;
+    background: var(--panel);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6), 0 2px 8px rgba(255, 0, 51, 0.06);
+    margin-top: 50px;
 
     h3 {
-      font-size: 24px;
-      font-weight: 600;
-      margin-bottom: 15px;
+      font-size: 20px;
+      font-weight: 700;
+      margin: 0;
+      color: #fff;
     }
 
     .conflicts,
     .warnings {
       display: grid;
-      grid-template-columns: minmax($slot-min, 1fr);
+      gap: 10px;
 
       span {
-        color: red;
-        font-size: 16px;
-        font-weight: 500;
-        max-width: 450px;
+        font-size: 15px;
+        font-weight: 600;
+        max-width: 100%;
+        word-break: break-word;
       }
     }
 
     .conflicts {
-      margin-bottom: 10px;
+      span {
+        color: $danger-color;
+      }
+    }
+
+    .warnings {
+      span {
+        color: $color-yellow-1;
+      }
     }
   }
 }
@@ -642,5 +657,72 @@ $pad-card: 12px;
 
   .roFilters {
     width: 200px !important;
+  }
+}
+
+@media (max-width: 1140px) {
+  .buildContainer > .conflictsContainer {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    position: static;
+    width: 100%;
+    height: auto;
+    max-height: 420px;
+    margin-top: 12px;
+    padding: 16px;
+  }
+}
+
+@media (max-width: $media-tablet) {
+  .conflictsContainer {
+    width: 100%;
+    max-height: 360px;
+    padding: 14px;
+    row-gap: 12px;
+  }
+
+  .buildContainer > .conflictsContainer {
+    max-height: 360px;
+  }
+
+  .conflictsContainer h3 {
+    font-size: 18px;
+  }
+
+  .conflictsContainer .conflicts span,
+  .conflictsContainer .warnings span {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: $media-telephone-big) {
+  .conflictsContainer {
+    max-height: 300px;
+    padding: 10px;
+  }
+
+  .conflictsContainer .conflicts span,
+  .conflictsContainer .warnings span {
+    font-size: 13px;
+  }
+}
+
+@media (min-width: $media-laptop-l) {
+  .buildContainer {
+    width: fit-content !important;
+    grid-template-columns: repeat(2, minmax($slot-min, 1fr)) !important;
+  }
+}
+
+@media (min-width: $media-standard-pc) {
+  .buildContainer > .conflictsContainer {
+    width: 420px;
+    max-height: calc(100vh - 180px);
+  }
+}
+
+@media (min-width: $media-4k) {
+  .buildContainer > .conflictsContainer {
+    width: 520px;
   }
 }
