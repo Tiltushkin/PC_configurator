@@ -30,7 +30,7 @@ const BuildPage: React.FC = () => {
     const [editMode, setEditMode] = useState(false);
 
     const compatibility = checkCompatibility({ CPU: selectedCpu, GPU: selectedGpu, MB: selectedMb, CASE: selectedCase, PSU: selectedPsu, cooling: selectedCooling, memory: selectedMemory }, resolvedStorages);
-    
+
     return (
         <MainLayout>
             <AnimatedBackground />
@@ -95,7 +95,7 @@ const BuildPage: React.FC = () => {
                                 <span>Публичная сборка</span>
                             </label>
                             <div className={s.editActions}>
-                                <button className={s.secondaryBtn} onClick={() => setEditMode(false)}>Готово</button>
+                                <button className="btn btn-ghost" onClick={() => setEditMode(false)}>Готово</button>
                             </div>
                         </div>
                     )}
@@ -107,7 +107,6 @@ const BuildPage: React.FC = () => {
                     <SlotCard
                         selected={selectedCpu as CPU}
                         info={{ alt: "CPU", altImage: "/build/cpu.svg", standardText: "Процессор" }}
-                        buildState={buildState}
                         onClickItem={() => openOverlay("cpu")}
                         onClickBtn={(e) => { e.stopPropagation(); clearSlot("cpu"); }}
                     />
@@ -115,7 +114,6 @@ const BuildPage: React.FC = () => {
                     <SlotCard
                         selected={selectedMb as MB}
                         info={{ alt: "MotherBoard", altImage: "/build/motherboard.svg", standardText: "Материнская плата" }}
-                        buildState={buildState}
                         onClickItem={() => openOverlay("mb")}
                         onClickBtn={(e) => { e.stopPropagation(); clearSlot("mb"); }}
                     />
@@ -123,7 +121,6 @@ const BuildPage: React.FC = () => {
                     <SlotCard
                         selected={selectedPsu as PSU}
                         info={{ alt: "PSU", altImage: "/build/power_supply.svg", standardText: "Блок питания" }}
-                        buildState={buildState}
                         onClickItem={() => openOverlay("psu")}
                         onClickBtn={(e) => { e.stopPropagation(); clearSlot("psu"); }}
                     />
@@ -131,7 +128,6 @@ const BuildPage: React.FC = () => {
                     <SlotCard
                         selected={selectedCase as CASE}
                         info={{ alt: "CASE", altImage: "/build/pc_case.svg", standardText: "Корпус" }}
-                        buildState={buildState}
                         onClickItem={() => openOverlay("case")}
                         onClickBtn={(e) => { e.stopPropagation(); clearSlot("case"); }}
                     />
@@ -139,7 +135,6 @@ const BuildPage: React.FC = () => {
                     <SlotCard
                         selected={selectedGpu as GPU}
                         info={{ alt: "GPU", altImage: "/build/gpu.svg", standardText: "Видеокарта" }}
-                        buildState={buildState}
                         onClickItem={() => openOverlay("gpu")}
                         onClickBtn={(e) => { e.stopPropagation(); clearSlot("gpu"); }}
                     />
@@ -147,7 +142,6 @@ const BuildPage: React.FC = () => {
                     <SlotCard
                         selected={selectedCooling as (AirCooling | SZO)}
                         info={{ alt: "Cooling", altImage: "/build/cooling.svg", standardText: "Система охлаждения" }}
-                        buildState={buildState}
                         onClickItem={() => openOverlay("cooling")}
                         onClickBtn={(e) => { e.stopPropagation(); clearSlot("cooling"); }}
                     />
@@ -155,7 +149,6 @@ const BuildPage: React.FC = () => {
                     <SlotCard
                         selected={selectedMemory as Memory}
                         info={{ alt: "Memory", altImage: "/build/ram.svg", standardText: "Оперативная память" }}
-                        buildState={buildState}
                         onClickItem={() => openOverlay("memory")}
                         onClickBtn={(e) => { e.stopPropagation(); clearSlot("memory"); }}
                     />
