@@ -1,174 +1,13 @@
-import React, { useState } from "react";
 import MainLayout from "../../layouts/MainLayout";
 import AnimatedBackground from "../../components/animations/AnimatedBackground.tsx";
 import s from "./AdminPage.module.scss";
-import { adminApi } from "../../api/api";
-import utils from "../../shared/utils/utils";
-import type {Tab, FieldType, Field, Section} from "../../shared/types/types.ts";
-import {cpuSections} from "./sections/cpu.ts";
-import {gpuSections} from "./sections/gpu.ts";
-import {mbSections} from "./sections/mb.ts";
-import {psuSections} from "./sections/psu.ts";
-import {caseSections} from "./sections/case.ts";
-import {szoSections} from "./sections/szo.ts";
-import {memorySections} from "./sections/memory.ts";
-import {airCoolingSections} from "./sections/airCooling.ts";
-import {ssdSections} from "./sections/ssd.ts";
-import {hdd2_5Sections} from "./sections/hdd2_5.ts";
-import {hdd3_5Sections} from "./sections/hdd3_5.ts";
-import {defaults} from "./defaults/defaults.ts";
-
-const sectionsByTab: Record<Tab, Section[]> = {
-    cpu: cpuSections,
-    gpu: gpuSections,
-    mb: mbSections,
-    psu: psuSections,
-    case: caseSections,
-    szo: szoSections,
-    aircooling: airCoolingSections,
-    memory: memorySections,
-    ssd: ssdSections,
-    hdd2_5: hdd2_5Sections,
-    hdd3_5: hdd3_5Sections,
-};
+import useAdmin from "../../shared/hooks/useAdmin.ts";
 
 export default function AdminPage() {
-    const [tab, setTab] = useState<Tab>("cpu");
-    const [form, setForm] = useState(() => ({ ...defaults["cpu"] }));
-    const [busy, setBusy] = useState(false);
-    const [result, setResult] = useState<string | null>(null);
-    const [err, setErr] = useState<string | null>(null);
-
-    const [imgInput, setImgInput] = useState<string>("");
-    const [localFiles, setLocalFiles] = useState<string[]>([]);
-
-    const TITLE_MAP = {
-        cpu: "Добавить CPU",
-        gpu: "Добавить GPU",
-        mb: "Добавить материнскую плату",
-        psu: "Добавить блок питания",
-        case: "Добавить корпус",
-        szo: "Добавить водянку",
-        aircooling: "Добавить воздушное охлаждение",
-        memory: "Добавить оперативную память",
-        ssd: "Добавить SSD",
-        hdd2_5: "Добавить HDD 2.5",
-        hdd3_5: "Добавить HDD 3.5",
-    } as const;
-
-    const title = TITLE_MAP[tab];
-    const onSwitch = (next: Tab) => {
-        setTab(next);
-        setForm({ ...defaults[next] });
-        setResult(null); setErr(null);
-        setImgInput(""); setLocalFiles([]);
-    };
-
-    const bind = (key: string, type: FieldType = "text") => (e: any) => {
-        let v: any;
-        if (type === "bool") v = !!e.target.checked;
-        else if (type === "number") v = Number(e.target.value);
-        else v = e.target.value;
-        setForm((prev: any) => ({ ...prev, [key]: v }));
-    };
-
-    const applyFieldValue = (f: Field) => {
-        const v = form[f.name];
-        if (f.type === "string[]") return Array.isArray(v) ? v.join(", ") : (v ?? "");
-        if (f.type === "number[]") return Array.isArray(v) ? v.join(", ") : (v ?? "");
-        if (f.type === "json") return v ?? "";
-        return v ?? (f.type === "number" ? 0 : "");
-    };
-
-    const submit = async () => {
-        try {
-            setBusy(true); setErr(null); setResult(null);
-            const payload = { ...form };
-
-            const normalizeArrays = (fields: Field[]) => {
-                for (const f of fields) {
-                    if (f.type === "string[]") payload[f.name] = utils.toArray(payload[f.name]);
-                    if (f.type === "number[]") payload[f.name] = utils.toNumArray(payload[f.name]);
-                    if (f.type === "json") {
-                        const raw = payload[f.name];
-                        if (raw && typeof raw === "string") {
-                            try { payload[f.name] = JSON.parse(raw); }
-                            catch { /* Ignore */ }
-                        }
-                    }
-                }
-            };
-            sectionsByTab[tab].forEach(sec => normalizeArrays(sec.fields));
-            payload.images = Array.isArray(payload.images) ? payload.images : utils.toArray(payload.images);
-
-            let resp: any;
-            switch (tab) {
-                case "cpu":
-                    resp = await adminApi.addCpu(payload);
-                    break;
-                case "gpu":
-                    resp = await adminApi.addGpu(payload);
-                    break;
-                case "mb":
-                    resp = await adminApi.addMb(payload);
-                    break;
-                case "psu":
-                    resp = await adminApi.addPsu(payload);
-                    break;
-                case "case":
-                    resp = await adminApi.addCase(payload);
-                    break;
-                case "szo":
-                    resp = await adminApi.addSzo(payload);
-                    break;
-                case "aircooling":
-                    resp = await adminApi.addAirCooling(payload);
-                    break;
-                case "memory":
-                    resp = await adminApi.addMemory(payload);
-                    break;
-                case "ssd":
-                    resp = await adminApi.addSsd(payload);
-                    break;
-                case "hdd2_5":
-                    resp = await adminApi.addHdd2_5(payload);
-                    break;
-                case "hdd3_5":
-                    resp = await adminApi.addHdd3_5(payload);
-                    break;
-            }
-            setResult(`OK: ${resp?.id}`);
-            setForm({ ...defaults[tab] });
-            setImgInput(""); setLocalFiles([]);
-        } catch (e: any) {
-            setErr(e?.message ?? "Ошибка сохранения");
-        } finally {
-            setBusy(false);
-        }
-    };
-
-    const addImage = () => {
-        const url = imgInput.trim();
-        if (!url) return;
-        setForm((prev: any) => ({ ...prev, images: [...(prev.images ?? []), url] }));
-        setImgInput("");
-    };
-
-    const onPickLocal = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const files = Array.from(e.target.files ?? []);
-        const urls = files.map((f) => URL.createObjectURL(f));
-        setLocalFiles((prev) => [...prev, ...urls]);
-    };
-
-    const removeImageAt = (idx: number, local = false) => {
-        if (local) {
-            setLocalFiles((prev) => prev.filter((_, i) => i !== idx));
-        } else {
-            setForm((prev: any) => ({ ...prev, images: (prev.images ?? []).filter((_: any, i: number) => i !== idx) }));
-        }
-    };
-
-    const sections = sectionsByTab[tab];
+    const {
+        title, tab, onSwitch, imgInput, setImgInput, addImage, onPickLocal, form, removeImageAt,
+        localFiles, sections, applyFieldValue, bind, busy, submit, result, err
+    } = useAdmin();
 
     return (
         <MainLayout>
@@ -242,7 +81,6 @@ export default function AdminPage() {
                                             {f.type === "bool" ? (
                                                 <div className={s.switch}>
                                                     <input type="checkbox" checked={!!form[f.name]} onChange={bind(f.name, "bool")} />
-                                                    <div />
                                                 </div>
                                             ) : f.type === "json" ? (
                                                 <textarea
@@ -270,7 +108,13 @@ export default function AdminPage() {
                     <div className={s.right}>
                         <div className={s.cardSticky}>
                             <div className={s.actions}>
-                                <button className="btn" disabled={busy} onClick={submit}>{busy ? "Сохраняю..." : "Сохранить"}</button>
+                                <button
+                                    className={s.saveBtn}
+                                    disabled={busy}
+                                    onClick={submit}
+                                >
+                                    {busy ? "Сохраняю..." : "Сохранить"}
+                                </button>
                                 {result && <div className={s.ok}>{result}</div>}
                                 {err && <div className={s.err}>{err}</div>}
                             </div>
