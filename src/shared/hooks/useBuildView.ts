@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import type { AppDispatch, RootState } from "../../store/store";
-import { loadMeThunk } from "../../store/slices/authSlice";
+import type { AppDispatch } from "../../store/store";
+import { loadMeThunk, selectToken, selectUser } from "../../store/slices/authSlice";
 import { getBuildById } from "../../api/buildsClient";
 import { componentsApi } from "../../api/api";
 import type { AirCooling, allComponents, BuildEx, BuildResponse, CASE, CompMaps, ComponentsAllResponse, COOLING, CPU, GPU, HDD2_5, HDD3_5, MB, Memory, PSU, SlotType, SSD, SZO } from "../types/types";
@@ -14,7 +14,8 @@ export default function useBuildView() {
     const navigate = useNavigate();
 
     const { id } = useParams<{ id: string }>();
-    const { token, user } = useSelector((st: RootState) => st.auth);
+    const token = useSelector(selectToken);
+    const user = useSelector(selectUser);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [maps, setMaps] = useState<CompMaps | null>(null);
