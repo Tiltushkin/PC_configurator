@@ -492,6 +492,7 @@ export type BuildSavePayload = {
   memoryId?: string | null;
   ssdIds?: string[] | null;
   hddIds?: string[] | null;
+  isPublic?: boolean | null;
 };
 
 export interface CompatibilityComponents {
