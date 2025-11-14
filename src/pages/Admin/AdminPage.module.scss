@@ -203,8 +203,8 @@
 }
 
 .thumb img {
-  width: 100%;
-  height: 100%;
+  max-width: 256px;
+  max-height: 256px;
   aspect-ratio: 1 / 1;
   object-fit: cover;
   display: block;
