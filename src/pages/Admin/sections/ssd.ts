@@ -4,36 +4,36 @@ export const ssdSections: Section[] = [
     {
         title: "Основное",
         fields: [
-            {name: "price", label: "Price", type: "number"},
-            {name: "warranty", label: "Warranty", type: "number"},
-            {name: "model", label: "Model", type: "text"},
-            {name: "manufacturerCode", label: "ManufacturerCode", type: "text"},
-            {name: "diskCapacity", label: "DiskCapacity", type: "number"},
-            {name: "formFactor", label: "FormFactor", type: "text"},
-            {name: "physInterface", label: "PhysInterface", type: "text"},
-            {name: "m2ConnectorKey", label: "M2ConnectorKey", type: "text"},
+            {name: "price", label: "Цена", type: "number"},
+            {name: "warranty", label: "Гарантия", type: "number"},
+            {name: "model", label: "Модель", type: "text"},
+            {name: "manufacturerCode", label: "Код производителя", type: "text"},
+            {name: "diskCapacity", label: "Объем накопителя", type: "number"},
+            {name: "formFactor", label: "Форм-фактор", type: "text"},
+            {name: "physInterface", label: "Физический интерфейс", type: "text"},
+            {name: "m2ConnectorKey", label: "Ключ M.2 разъема", type: "text"},
             {name: "nVMe", label: "NVMe", type: "bool"},
-            {name: "memoryStructure", label: "MemoryStructure", type: "text"},
-            {name: "dRAM", label: "DRAM", type: "bool"}
+            {name: "memoryStructure", label: "Структура памяти", type: "text"},
+            {name: "dRAM", label: "DRAM буфер", type: "bool"}
         ]
     },
     {
         title: "Производительность/ресурс",
         fields: [
-            {name: "maxReadSpeed", label: "MaxReadSpeed", type: "number"},
-            {name: "maxWriteSpeed", label: "MaxWriteSpeed", type: "number"},
-            {name: "tBW", label: "TBW", type: "number"},
+            {name: "maxReadSpeed", label: "Максимальная скорость последовательного чтения", type: "number"},
+            {name: "maxWriteSpeed", label: "Максимальная скорость последовательной записи", type: "number"},
+            {name: "tBW", label: "Максимальный ресурс записи (TBW)", type: "number"},
             {name: "dWPD", label: "DWPD", type: "number"}
         ]
     },
     {
         title: "Габариты/охлаждение",
         fields: [
-            {name: "radiator", label: "Radiator", type: "bool"},
-            {name: "length", label: "Length", type: "number"},
-            {name: "width", label: "Width", type: "number"},
-            {name: "thickness", label: "Thickness", type: "number"},
-            {name: "weight", label: "Weight", type: "number"}
+            {name: "radiator", label: "Радиатор в комплекте", type: "bool"},
+            {name: "length", label: "Длина", type: "number"},
+            {name: "width", label: "Ширина", type: "number"},
+            {name: "thickness", label: "Толщина", type: "number"},
+            {name: "weight", label: "Вес", type: "number"}
         ]
     }
 ];

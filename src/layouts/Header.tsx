@@ -1,14 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import s from "./Layout.module.scss";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import type { allComponents } from "../shared/types/types";
 import utils from "../shared/utils/utils";
-import { selectUser } from "../store/slices/authSlice";
+import { logout, selectUser } from "../store/slices/authSlice";
 import useComponents from "../shared/hooks/useComponents";
+import { type AppDispatch } from "../store/store";
 
 function Header() {
     const navigate = useNavigate();
+    const dispatch = useDispatch<AppDispatch>();
     const user = useSelector(selectUser);
     const {
         cpus, gpus, mbs, psus, cases, szos, airCoolings, memories, ssds, hdd2_5, hdd3_5
@@ -79,21 +81,27 @@ function Header() {
 
                     {user ? (
                         user?.avatarUrl ? (
-                            <button
-                                className={s.profileButton}
-                                onClick={() => navigate("/profile")}
-                                title={user.userName || user.login}
-                            >
-                                <img
-                                    src={user.avatarUrl}
-                                    alt={user.userName || user.login}
-                                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-                                />
-                            </button>
+                            <>
+                                <button
+                                    className={s.profileButton}
+                                    onClick={() => navigate("/profile")}
+                                    title={user.userName || user.login}
+                                >
+                                    <img
+                                        src={user.avatarUrl}
+                                        alt={user.userName || user.login}
+                                        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                                    />
+                                </button>
+                                <button className="btn btn--ghost" onClick={() => dispatch(logout())} style={{ marginLeft: 20 }}>Выход</button>
+                            </>
                         ) : (
-                            <button className="btn btn--ghost" onClick={() => navigate("/profile")} style={{ marginLeft: 8 }}>
-                                {user?.userName ?? "Аккаунт"}
-                            </button>
+                            <>
+                                <button className="btn btn--ghost" onClick={() => navigate("/profile")} style={{ marginLeft: 8 }}>
+                                    {user?.userName ?? "Аккаунт"}
+                                </button>
+                                <button className="btn btn--ghost" onClick={() => dispatch(logout())} style={{ marginLeft: 20 }}>Выход</button>
+                            </>
                         )
                     ) : (
                         <button className="btn" onClick={() => navigate("/auth")} style={{ marginLeft: 8 }}>

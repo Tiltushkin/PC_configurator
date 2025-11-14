@@ -2,25 +2,62 @@ import bp from "../Build/BuildPage.module.scss";
 import s from "./BuildViewPage.module.scss";
 import MainLayout from "../../layouts/MainLayout";
 import AnimatedBackground from "../../components/animations/AnimatedBackground.tsx";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import utils from "../../shared/utils/utils";
 import ChooseComponentOverlay from "../../components/ChooseComponentOverlay/ChooseComponentOverlay.tsx";
 import useBuildView from "../../shared/hooks/useBuildView.ts";
 import { checkCompatibility } from "../../shared/utils/compatibility.ts";
 
 export default function BuildViewPage() {
+    const navigate = useNavigate();
 
     const {
         isOwner, onDeleteBuild, buildState, loading, error, saving, totalPrice, maps, selected,
         openOverlay, clearSlot, resolvedStorages, decStorageQty, incStorageQty, removeStorageAt,
         addStorageRef, storagePickerOpen, setStoragePickerOpen, overlayOpen, overlaySlot,
-        listBySlot, query, setQuery, onPick, closeOverlay
+        listBySlot, query, setQuery, onPick, closeOverlay, buildRaw
     } = useBuildView();
 
     const compatibility = checkCompatibility({
         CPU: selected.cpu, GPU: selected.gpu, MB: selected.mb, CASE: selected.case,
         PSU: selected.psu, cooling: selected.cooling, memory: selected.memory
     }, resolvedStorages);
+
+    if (loading) return (
+        <MainLayout>
+            <AnimatedBackground />
+            <div className={s.container}>
+                <div className={s.notPublicContainer}>
+                    <span className={s.loading}>Загрузка…</span>
+                </div>
+                <button className={s.backButton} type="button" onClick={() => navigate("/")}>← На главную</button>
+            </div>
+        </MainLayout>
+    )
+
+    if (!buildRaw && !loading) return (
+        <MainLayout>
+            <AnimatedBackground />
+            <div className={s.container}>
+                <div className={s.notPublicContainer}>
+                    <span className={s.notPublic}>Извините, но такой сборки не существует.</span>
+                </div>
+                <button className={s.backButton} type="button" onClick={() => navigate("/")}>← На главную</button>
+            </div>
+        </MainLayout>
+    )
+
+    if (!buildRaw?.isPublic && !isOwner && !loading) return (
+        <MainLayout>
+            <AnimatedBackground />
+            <div className={s.container}>
+                <div className={s.notPublicContainer}>
+                    <span className={s.notPublic}>Извините, но эта сборка не является публичной.</span>
+                </div>
+                <button className={s.backButton} type="button" onClick={() => navigate("/")}>← На главную</button>
+            </div>
+        </MainLayout>
+    )
 
     return (
         <MainLayout>
@@ -34,9 +71,11 @@ export default function BuildViewPage() {
                     <div style={{marginLeft:"auto"}} className={bp.totalPrice}>Общая стоимость сборки: {totalPrice}₸</div>
                 </div>
 
-                <div className="card" style={{position:"relative", width:"fit-content", padding:15, left:"50%", transform:"translateX(-50%)", display:"flex", gap:15, alignItems:"center", justifyContent:"center"}}>
+                <div className="card" style={{position:"relative", width:"fit-content", padding:15, left:"50%", transform:"translateX(-50%)", display:"flex", gap:15, alignItems:"center", justifyContent:"center", marginBottom: 20}}>
                     <h2 className="glow">{buildState?.name || "Название сборки"}</h2>
                 </div>
+
+                <span className={s.buildOwner}>Автор сборки: { buildRaw?.ownerDisplayName }</span>
 
                 {loading && <div className="card" style={{marginTop:20, padding:20}}>Загрузка…</div>}
                 {error && <div className={bp.error}>{error}</div>}
@@ -45,7 +84,11 @@ export default function BuildViewPage() {
                     <div className={bp.configContainer}>
                         <div className={bp.buildContainer}>
                             <div className={bp.buildContainer__item} onClick={() => openOverlay("cpu")}>
-                                <img src={utils.imgOf(selected.cpu?.Images, "/build/cpu.svg")} alt="CPU" />
+                                <img
+                                    src={utils.imgOf(selected.cpu?.Images, "/build/cpu.svg")}
+                                    alt="CPU"
+                                    style={selected.cpu?.Images ? { width: '64px', height: '64px', minWidth: '64px', minHeight: '64px' } : { width: '48px', height: '48px' }}
+                                />
                                 <p className={bp.itemTitle}>
                                     {selected.cpu ? (
                                         <> {selected.cpu.Model} <br/><span>• {selected.cpu.Socket}, {selected.cpu.TotalCores} x {selected.cpu.BasicFrequency} ГГц, L2 - {selected.cpu.CacheL2} МБ, L3 - {selected.cpu.CacheL3} МБ, 2 x {selected.cpu.MemoryFrequency}</span></>

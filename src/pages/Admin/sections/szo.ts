@@ -4,63 +4,63 @@ export const szoSections: Section[] = [
     {
         title: "Основное",
         fields: [
-            {name: "price", label: "Price", type: "number"},
-            {name: "warranty", label: "Warranty", type: "number"},
-            {name: "model", label: "Model", type: "text"},
-            {name: "mainColor", label: "MainColor", type: "text"},
-            {name: "backLightType", label: "BackLightType", type: "text"},
-            {name: "backLightSource", label: "BackLightSource", type: "text"},
-            {name: "backLightConnector", label: "BackLightConnector", type: "text"},
-            {name: "lCD", label: "LCD", type: "bool"},
-            {name: "purpose", label: "Purpose", type: "text"},
-            {name: "sockets", label: "Sockets", type: "string[]"}
+            {name: "price", label: "Цена", type: "number"},
+            {name: "warranty", label: "Гарантия", type: "number"},
+            {name: "model", label: "Модель", type: "text"},
+            {name: "mainColor", label: "Основной цвет", type: "text"},
+            {name: "backLightType", label: "Тип подсветки", type: "text"},
+            {name: "backLightSource", label: "Источник подсветки", type: "text"},
+            {name: "backLightConnector", label: "Разъем подключения подсветки", type: "text"},
+            {name: "lCD", label: "LCD дисплей", type: "bool"},
+            {name: "purpose", label: "Назначение", type: "text"},
+            {name: "sockets", label: "Сокеты", type: "string[]"}
         ]
     },
     {
         title: "Водоблок",
         fields: [
-            {name: "waterBlockMaterial", label: "WaterBlockMaterial", type: "text"},
-            {name: "waterBlockSize", label: "WaterBlockSize", type: "text"}
+            {name: "waterBlockMaterial", label: "Материал водоблока", type: "text"},
+            {name: "waterBlockSize", label: "Размеры водоблока", type: "text"}
         ]
     },
     {
         title: "Радиатор",
         fields: [
-            {name: "radiatorMaterial", label: "RadiatorMaterial", type: "text"},
-            {name: "radiatorMountingDimensions", label: "RadiatorMountingDimensions", type: "text"},
-            {name: "radiatorLength", label: "RadiatorLength", type: "number"},
-            {name: "radiatorWidth", label: "RadiatorWidth", type: "number"},
-            {name: "radiatorThickness", label: "RadiatorThickness", type: "number"},
-            {name: "tubeLength", label: "TubeLength", type: "number"}
+            {name: "radiatorMaterial", label: "Материал радиатора", type: "text"},
+            {name: "radiatorMountingDimensions", label: "Монтажный размер радиатора", type: "text"},
+            {name: "radiatorLength", label: "Длина радиатора", type: "number"},
+            {name: "radiatorWidth", label: "Ширина радиатора", type: "number"},
+            {name: "radiatorThickness", label: "Толщина радиатора", type: "number"},
+            {name: "tubeLength", label: "Длина трубок", type: "number"}
         ]
     },
     {
         title: "Характеристики",
         fields: [
-            {name: "tDP", label: "TDP", type: "number"}
+            {name: "tDP", label: "Рассеиваемая мощность, TDP", type: "number"}
         ]
     },
     {
         title: "Вентиляторы",
         fields: [
-            {name: "includedFans", label: "IncludedFans", type: "number"},
-            {name: "fanDimensions", label: "FanDimensions", type: "text"},
-            {name: "fanBearingType", label: "FanBearingType", type: "text"},
-            {name: "minRotationSpeed", label: "MinRotationSpeed", type: "number"},
-            {name: "maxRotationSpeed", label: "MaxRotationSpeed", type: "number"},
-            {name: "fanSpeedAdjustment", label: "FanSpeedAdjustment", type: "text"},
-            {name: "maxNoiseLevel", label: "MaxNoiseLevel", type: "number"},
-            {name: "maxAirFlow", label: "MaxAirFlow", type: "number"},
-            {name: "maxStaticPressure", label: "MaxStaticPressure", type: "number"},
-            {name: "fanConnectionSocket", label: "FanConnectionSocket", type: "text"}
+            {name: "includedFans", label: "Количество вентиляторов в комплекте", type: "number"},
+            {name: "fanDimensions", label: "Размеры вентиляторов", type: "text"},
+            {name: "fanBearingType", label: "Тип подшипника вентилятора", type: "text"},
+            {name: "minRotationSpeed", label: "Минимальная скорость вращения", type: "number"},
+            {name: "maxRotationSpeed", label: "Максимальная скорость вращения", type: "number"},
+            {name: "fanSpeedAdjustment", label: "Регулировка скорости вращения вентилятора", type: "text"},
+            {name: "maxNoiseLevel", label: "Максимальный уровень шума", type: "number"},
+            {name: "maxAirFlow", label: "Максимальный воздушный поток", type: "number"},
+            {name: "maxStaticPressure", label: "Максимальное статическое давление", type: "number"},
+            {name: "fanConnectionSocket", label: "Разъем подключения вентиляторов", type: "text"}
         ]
     },
     {
         title: "Помпа",
         fields: [
-            {name: "pumpNoiseLevel", label: "PumpNoiseLevel", type: "number"},
-            {name: "pumpRotationSpeed", label: "PumpRotationSpeed", type: "number"},
-            {name: "pumpConnectionSocket", label: "PumpConnectionSocket", type: "text"}
+            {name: "pumpNoiseLevel", label: "Уровень шума помпы", type: "number"},
+            {name: "pumpRotationSpeed", label: "Скорость вращения помпы", type: "number"},
+            {name: "pumpConnectionSocket", label: "Разъем подключения помпы", type: "text"}
         ]
     }
 ];

@@ -1,3 +1,81 @@
 @use "../../styles/index" as *;
+@use "../../styles/abstracts/variables" as *;
 
 .wrap { padding: 16px 0 40px; }
+
+.buildOwner {
+    font-size: 24px;
+    font-weight: 600;
+    position: relative;
+    left: 5px;
+}
+
+.container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.notPublicContainer {
+    @extend .card;
+    padding: 15px;
+    max-width: fit-content;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 100px;
+}
+
+.notPublic {
+    font-size: 32px;
+    font-weight: 600;
+    color: rgb(195, 1, 1);
+}
+
+.loading {
+    font-size: 32px;
+    font-weight: 600;
+    color: rgb(224, 224, 224);
+}
+
+.backButton {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    color: inherit;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 18px;
+    transition: transform 0.12s ease, background 0.12s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+    }
+}
+
+@media (max-width: $media-tablet) {
+    .notPublic {
+        font-size: 28px;
+    }
+}
+
+@media (max-width: $media-telephone-big) {
+    .notPublic {
+        font-size: 24px;
+    }
+}
+
+@media (max-width: $media-telephone-medium) {
+    .notPublic {
+        font-size: 22px;
+    }
+}
+
+@media (max-width: $media-telephone-small) {
+    .notPublic {
+        font-size: 20px;
+    }
+}

@@ -25,7 +25,8 @@ export function toSavePayload(state: BuildEx): BuildSavePayload {
     coolingId: state.coolingId ?? null,
     memoryId: state.memoryId ?? null,
     ssdIds,
-    hddIds
+    hddIds,
+    isPublic: state.isPublic ?? false
   };
 }
 
