@@ -23,7 +23,19 @@ export default function BuildViewPage() {
         PSU: selected.psu, cooling: selected.cooling, memory: selected.memory
     }, resolvedStorages);
 
-    if (!buildRaw) return (
+    if (loading) return (
+        <MainLayout>
+            <AnimatedBackground />
+            <div className={s.container}>
+                <div className={s.notPublicContainer}>
+                    <span className={s.loading}>Загрузка…</span>
+                </div>
+                <button className={s.backButton} type="button" onClick={() => navigate("/")}>← На главную</button>
+            </div>
+        </MainLayout>
+    )
+
+    if (!buildRaw && !loading) return (
         <MainLayout>
             <AnimatedBackground />
             <div className={s.container}>
@@ -35,7 +47,7 @@ export default function BuildViewPage() {
         </MainLayout>
     )
 
-    if (!buildRaw?.isPublic && !isOwner) return (
+    if (!buildRaw?.isPublic && !isOwner && !loading) return (
         <MainLayout>
             <AnimatedBackground />
             <div className={s.container}>
