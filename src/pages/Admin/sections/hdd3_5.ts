@@ -4,55 +4,55 @@ export const hdd3_5Sections: Section[] = [
     {
         title: "Основное",
         fields: [
-            {name: "price", label: "Price", type: "number"},
-            {name: "warranty", label: "Warranty", type: "number"},
-            {name: "model", label: "Model", type: "text"},
-            {name: "manufacturerCode", label: "ManufacturerCode", type: "text"},
-            {name: "diskCapacity", label: "DiskCapacity", type: "number"},
-            {name: "interface", label: "Interface", type: "text"},
-            {name: "interfaceBandwidth", label: "InterfaceBandwidth", type: "number"},
-            {name: "recordingTechnology", label: "RecordingTechnology", type: "text"},
-            {name: "rAIDOptimization", label: "RAIDOptimization", type: "bool"},
-            {name: "heliumFilled", label: "HeliumFilled", type: "bool"}
+            {name: "price", label: "Цена", type: "number"},
+            {name: "warranty", label: "Гарантия", type: "number"},
+            {name: "model", label: "Модель", type: "text"},
+            {name: "manufacturerCode", label: "Код производителя", type: "text"},
+            {name: "diskCapacity", label: "Объем накопителя", type: "number"},
+            {name: "interface", label: "Интерфейс", type: "text"},
+            {name: "interfaceBandwidth", label: "Пропускная способность интерфейса", type: "number"},
+            {name: "recordingTechnology", label: "Технология записи", type: "text"},
+            {name: "rAIDOptimization", label: "Оптимизация под RAID-массивы", type: "bool"},
+            {name: "heliumFilled", label: "С гелиевым наполнением", type: "bool"}
         ]
     },
     {
         title: "Производительность/шум",
         fields: [
-            {name: "cacheSize", label: "CacheSize", type: "number"},
-            {name: "spindleRotationSpeed", label: "SpindleRotationSpeed", type: "number"},
-            {name: "dataTransferRate", label: "DataTransferRate", type: "number"},
-            {name: "noiseLevel", label: "NoiseLevel", type: "number"},
-            {name: "noiseLevelIdle", label: "NoiseLevelIdle", type: "number"}
+            {name: "cacheSize", label: "Объем кэш-памяти", type: "number"},
+            {name: "spindleRotationSpeed", label: "Скорость вращения шпинделя", type: "number"},
+            {name: "dataTransferRate", label: "Максимальная скорость передачи данных", type: "number"},
+            {name: "noiseLevel", label: "Уровень шума во время работы", type: "number"},
+            {name: "noiseLevelIdle", label: "Уровень шума в простое", type: "number"}
         ]
     },
     {
         title: "Энергопотребление",
         fields: [
-            {name: "maxPowerConsumption", label: "MaxPowerConsumption", type: "number"},
-            {name: "standbyPowerConsumption", label: "StandbyPowerConsumption", type: "number"}
+            {name: "maxPowerConsumption", label: "Максимальное энергопотребление", type: "number"},
+            {name: "standbyPowerConsumption", label: "Энергопотребление в режиме ожидания", type: "number"}
         ]
     },
     {
         title: "Надёжность",
         fields: [
-            {name: "impactResistance", label: "ImpactResistance", type: "number"},
-            {name: "parkingCycles", label: "ParkingCycles", type: "number"}
+            {name: "impactResistance", label: "Ударостойкость при работе", type: "number"},
+            {name: "parkingCycles", label: "Число циклов позиционирования-парковки", type: "number"}
         ]
     },
     {
         title: "Температуры",
         fields: [
-            {name: "maxWorkingTemp", label: "MaxWorkingTemp", type: "number"}
+            {name: "maxWorkingTemp", label: "Максимальная рабочая температура", type: "number"}
         ]
     },
     {
         title: "Габариты и вес",
         fields: [
-            {name: "width", label: "Width", type: "number"},
-            {name: "length", label: "Length", type: "number"},
-            {name: "thickness", label: "Thickness", type: "number"},
-            {name: "weight", label: "Weight", type: "number"}
+            {name: "width", label: "Ширина", type: "number"},
+            {name: "length", label: "Длина", type: "number"},
+            {name: "thickness", label: "Толщина", type: "number"},
+            {name: "weight", label: "Вес", type: "number"}
         ]
     }
 ];
